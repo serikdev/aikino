@@ -96,7 +96,7 @@ function Reveal({ as: Tag = "div", delay = 0, className = "", children, ...rest 
           io.disconnect();
         }
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
+      { rootMargin: "0px 0px 20% 0px", threshold: 0 }
     );
     io.observe(el);
     return () => io.disconnect();
@@ -285,7 +285,7 @@ function Result() {
         </Reveal>
         <ul className="skills">
           {skills.map((s, i) => (
-            <Reveal as="li" key={s} delay={i * 30}>
+            <Reveal as="li" key={s}>
               <span className="check">✓</span>
               {s}
             </Reveal>
@@ -330,7 +330,7 @@ function How() {
       </SectionHead>
       <div className="how">
         {how.map((h, i) => (
-          <Reveal className="card" key={h.title} delay={i * 30}>
+          <Reveal className="card" key={h.title}>
             <b>{h.big}</b>
             <h3>{h.title}</h3>
             <p>{h.text}</p>
@@ -379,7 +379,7 @@ function Group() {
         </Reveal>
         <div className="group-perks">
           {groupPerks.map((g, i) => (
-            <Reveal className="card" key={g.big} delay={i * 30}>
+            <Reveal className="card" key={g.big}>
               <b>{g.big}</b>
               <h3>{g.title}</h3>
               <p>{g.text}</p>
@@ -477,7 +477,7 @@ function Program() {
       </Reveal>
       <div className="modules">
         {modules.map((m, i) => (
-          <Reveal key={m.id} delay={i * 30}>
+          <Reveal key={m.id}>
             <Module m={m} open={open.has(m.id)} onToggle={() => toggle(m.id)} />
           </Reveal>
         ))}
@@ -505,7 +505,7 @@ function Plans() {
       </Reveal>
       <div className="plans">
         {plans.map((p, i) => (
-          <Reveal className={`plan ${p.best ? "best" : ""}`} key={p.name} delay={i * 30}>
+          <Reveal className={`plan ${p.best ? "best" : ""}`} key={p.name}>
             {p.best && <span className="badge">Рекомендую</span>}
             <h3>{p.name}</h3>
             {promo && <div className="price-old">{p.price}</div>}
@@ -572,10 +572,16 @@ function Cta() {
 function Dock() {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
-    const onScroll = () => {
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
       const nearBottom =
         window.innerHeight + window.scrollY > document.documentElement.scrollHeight - 420;
       setVisible(window.scrollY > 560 && !nearBottom);
+    };
+    // не чаще одного замера на кадр, чтобы прокрутка оставалась плавной
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(measure);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });

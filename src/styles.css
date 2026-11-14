@@ -61,12 +61,10 @@ h1, h2, h3 {
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 20%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 20%, transparent 75%);
 }
 
 /* ---------- Появление ---------- */
-.reveal { opacity: 0; transform: translateY(12px); transition: opacity 0.35s ease-out, transform 0.35s ease-out; }
+.reveal { opacity: 0; transform: translateY(8px); transition: opacity 0.22s ease-out, transform 0.22s ease-out; }
 .reveal.is-in { opacity: 1; transform: none; }
 
 /* ---------- Шапка ---------- */
@@ -532,3 +530,9 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12
   .countdown span { flex: 1; min-width: 0; }
   .popup .countdown { width: 100%; }
 }
+
+/* Сетка фона: только верх страницы, без маски (маска тормозит прокрутку на телефонах) */
+.grid { inset: 0 0 auto 0; height: 640px; }
+.grid::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 30%, var(--bg)); }
+/* Тени поменьше: большие размытые тени дорого перерисовывать */
+.film, .cta, .free, .plan.best { box-shadow: 0 16px 40px -24px rgba(209, 254, 23, 0.5); }
