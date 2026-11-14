@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Программа курса AI-видео</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Один мир: тёмный «видоискатель» камеры, жёлтый акцент. Коротко: результат → отличие → программа → тарифы. */
+  --bg: #0c0c0d;
+  --panel: #151517;
+  --line: #2a2a2d;
+  --text: #f4f2ec;
+  --muted: #a3a09a;
+  --accent: #f5c33b;
+  --rec: #e5352b;
+  --display: "Oswald", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "Manrope", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+a { color: var(--accent); }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+h1, h2, h3 { font-family: var(--display); text-transform: uppercase; letter-spacing: .01em; line-height: 1.08; text-wrap: balance; margin: 0; }
+.tag { display: inline-block; background: var(--accent); color: #111; font-family: var(--display); font-weight: 700; text-transform: uppercase; padding: 4px 12px 5px; transform: rotate(-2deg); }
+
+/* Видоискатель */
+.frame { position: relative; padding: 48px 28px 32px; }
+.frame .c { position: absolute; width: 34px; height: 34px; border-color: #6b6964; border-style: solid; border-width: 0; }
+.c.tl { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
+.c.tr { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; }
+.c.bl { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; }
+.c.br { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; }
+.recmark { position: absolute; top: 16px; left: 18px; display: flex; align-items: center; gap: 8px; font-family: var(--display); font-size: 13px; color: var(--muted); letter-spacing: .12em; }
+.recmark i { width: 10px; height: 10px; border-radius: 50%; background: var(--rec); animation: blink 1.4s steps(1) infinite; }
+@keyframes blink { 50% { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) { .recmark i { animation: none; } }
+
+.hero { margin-top: 20px; }
+.hero h1 { font-size: clamp(38px, 9vw, 64px); margin-top: 18px; }
+.hero h1 span { color: var(--accent); }
+.hero p { color: var(--muted); margin: 14px 0 0; font-size: 18px; max-width: 46ch; }
+.facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 26px; }
+.fact { border: 1px solid var(--line); background: var(--panel); padding: 12px; }
+.fact b { display: block; font-family: var(--display); font-size: 30px; color: var(--accent); line-height: 1; font-variant-numeric: tabular-nums; }
+.fact small { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; line-height: 1.3; }
+
+section { padding-top: 56px; }
+.sec-head { margin-bottom: 20px; }
+.sec-head h2 { font-size: clamp(28px, 6vw, 40px); }
+.sec-head h2 span { color: var(--accent); }
+
+/* Результат */
+.result { display: grid; grid-template-columns: 1fr 1.25fr; gap: 14px; align-items: stretch; }
+.film { background: var(--accent); color: #111; padding: 26px 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; }
+.film b { font-family: var(--display); font-size: 84px; line-height: .85; }
+.film h3 { font-size: 28px; }
+.film p { margin: 0; font-weight: 600; font-size: 15px; }
+.skills { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.skills li { background: var(--panel); border: 1px solid var(--line); padding: 12px 14px 12px 44px; position: relative; font-weight: 600; }
+.skills li::before { content: "✓"; position: absolute; left: 16px; top: 11px; color: var(--accent); font-weight: 700; }
+
+/* Отличие */
+.vs { border: 1px solid var(--line); }
+.vs-row { display: grid; grid-template-columns: 1fr 1fr; }
+.vs-row + .vs-row { border-top: 1px solid var(--line); }
+.vs-row div { padding: 14px 16px; font-size: 15px; }
+.vs-row div:first-child { color: var(--muted); text-decoration: line-through; text-decoration-color: #55534f; }
+.vs-row div:last-child { background: rgba(245,195,59,.07); font-weight: 600; border-left: 2px solid var(--accent); }
+.vs-row.head div { font-family: var(--display); text-transform: uppercase; text-decoration: none; font-size: 15px; letter-spacing: .04em; font-weight: 600; }
+.vs-row.head div:first-child { color: var(--muted); }
+.vs-row.head div:last-child { background: var(--accent); color: #111; }
+
+/* Программа */
+.mods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.mod { background: var(--panel); border: 1px solid var(--line); padding: 16px 16px 14px; display: grid; grid-template-columns: 44px 1fr; gap: 4px 12px; }
+.mod .n { grid-row: span 3; font-family: var(--display); font-weight: 700; font-size: 44px; line-height: .9; color: var(--accent); }
+.mod h3 { font-size: 20px; }
+.mod .wk { font-family: var(--display); color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+.mod .out { font-size: 14px; color: var(--text); margin-top: 6px; }
+.mod .out em { font-style: normal; color: var(--accent); font-weight: 700; }
+.mod.fin { border-color: var(--accent); }
+
+details.all { margin-top: 10px; border: 1px solid var(--line); }
+details.all summary { cursor: pointer; padding: 14px 16px; font-family: var(--display); text-transform: uppercase; letter-spacing: .04em; list-style: none; display: flex; justify-content: space-between; }
+details.all summary::-webkit-details-marker { display: none; }
+details.all summary::after { content: "+"; color: var(--accent); font-size: 20px; line-height: 1; }
+details.all[open] summary::after { content: "–"; }
+.lessons { margin: 0; padding: 0 16px 14px; list-style: none; columns: 2; column-gap: 24px; font-size: 14px; color: var(--muted); }
+.lessons li { break-inside: avoid; padding: 5px 0; display: flex; gap: 10px; }
+.lessons li b { color: var(--accent); font-family: var(--display); min-width: 20px; font-variant-numeric: tabular-nums; }
+
+
+/* Как проходит */
+.how { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.how div { background: var(--panel); border: 1px solid var(--line); padding: 14px; }
+.how b { display: block; font-family: var(--display); font-size: 26px; color: var(--accent); line-height: 1.05; }
+.how h3 { font-size: 16px; margin: 8px 0 4px; }
+.how p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
+
+/* Карта и недели */
+.map { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+.map a { text-decoration: none; display: flex; flex-direction: column; gap: 6px; }
+.map .bar { height: 10px; background: var(--accent); }
+.map .bar.fin { background: var(--text); }
+.map span { font-family: var(--display); font-size: 12px; color: var(--muted); text-align: center; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font-size: 13px; margin-top: 12px; }
+.legend b { color: var(--text); font-weight: 600; }
+.module { margin-top: 36px; }
+.module-head { display: flex; align-items: baseline; gap: 14px; border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+.module-head .num { font-family: var(--display); font-weight: 700; font-size: 54px; line-height: .9; color: var(--accent); min-width: 34px; }
+.module-head h3 { font-size: clamp(24px, 5vw, 32px); }
+.module-head .when { margin-left: auto; font-family: var(--display); color: var(--muted); font-size: 15px; white-space: nowrap; }
+.module.final .module-head { border-color: var(--text); }
+.module.final .num { color: var(--text); }
+.week { margin-top: 16px; border-left: 2px solid var(--line); padding-left: 18px; }
+.week-label { font-family: var(--display); text-transform: uppercase; font-size: 14px; letter-spacing: .1em; color: var(--muted); margin-bottom: 8px; }
+.lesson { display: grid; grid-template-columns: 74px 1fr; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line); }
+.lesson:first-of-type { border-top: 0; padding-top: 4px; }
+.week-label + .lesson { border-top: 0; padding-top: 4px; }
+.lesson .n { font-family: var(--display); font-size: 14px; color: var(--muted); text-transform: uppercase; line-height: 1.25; }
+.lesson .n b { display: block; font-size: 26px; color: var(--text); font-weight: 600; }
+.lesson h4 { margin: 0 0 6px; font-size: 18px; font-weight: 700; line-height: 1.3; }
+.lesson ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 3px; }
+.lesson li { position: relative; padding-left: 18px; color: var(--muted); font-size: 15px; }
+.lesson li::before { content: ""; position: absolute; left: 0; top: .72em; width: 9px; height: 2px; background: var(--accent); }
+.task { margin-top: 6px; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent); padding: 12px 16px; font-size: 15px; }
+.task strong { font-family: var(--display); text-transform: uppercase; color: var(--accent); font-weight: 600; letter-spacing: .04em; margin-right: 6px; }
+
+/* Тарифы */
+.plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.plan { background: var(--panel); border: 1px solid var(--line); padding: 18px 16px; display: flex; flex-direction: column; gap: 8px; }
+.plan.best { border: 2px solid var(--accent); }
+.plan .badge { align-self: flex-start; background: var(--accent); color: #111; font-family: var(--display); text-transform: uppercase; font-size: 12px; padding: 2px 8px; letter-spacing: .06em; }
+.plan h3 { font-size: 22px; }
+.plan .price { font-family: var(--display); font-size: 40px; font-weight: 700; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.plan p { margin: 0; color: var(--muted); font-size: 15px; }
+.cmp-wrap { margin-top: 12px; overflow-x: auto; border: 1px solid var(--line); }
+table.cmp { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 330px; }
+.cmp th, .cmp td { padding: 10px; border-bottom: 1px solid var(--line); text-align: center; vertical-align: middle; }
+.cmp th:first-child, .cmp td:first-child { text-align: left; }
+.cmp thead th { font-family: var(--display); text-transform: uppercase; font-weight: 600; font-size: 14px; background: var(--panel); }
+.cmp thead th.hl { color: #111; background: var(--accent); }
+.cmp td.hl { background: rgba(245,195,59,.07); }
+.y { color: var(--accent); font-weight: 700; font-size: 17px; }
+.no { color: #55534f; }
+.cmp tbody tr:last-child td { border-bottom: 0; }
+
+.need { margin-top: 14px; color: var(--muted); font-size: 15px; border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; }
+.need b { color: var(--text); }
+
+.cta { margin: 56px 0 0; padding: 26px; background: var(--accent); color: #111; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+.cta h2 { font-size: clamp(26px, 5vw, 34px); }
+.cta p { margin: 6px 0 0; font-weight: 600; }
+.cta a { background: #111; color: var(--accent); text-decoration: none; font-family: var(--display); text-transform: uppercase; font-size: 18px; padding: 12px 20px; white-space: nowrap; }
+footer { color: #6b6964; font-size: 13px; padding: 24px 0 40px; }
+
+@media (max-width: 640px) {
+  .facts { grid-template-columns: repeat(2, 1fr); }
+  .result, .mods, .plans { grid-template-columns: 1fr; }
+  .frame { padding: 44px 20px 26px; }
+  .lessons { columns: 1; }
+  .how { grid-template-columns: repeat(2, 1fr); }
+  .lesson { grid-template-columns: 1fr; gap: 4px; }
+  .lesson .n b { display: inline; font-size: 15px; margin-left: 4px; }
+  .module-head { flex-wrap: wrap; }
+  .module-head .when { margin-left: 0; width: 100%; }
+  .vs-row div { padding: 12px; font-size: 14px; }
+  .cmp th, .cmp td { padding: 9px 6px; font-size: 14px; }
+  .cmp thead th { font-size: 12px; letter-spacing: 0; }
+}
+
+@page { size: A4; margin: 0; }
+@media print {
+  html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: var(--bg); }
+  .recmark i { animation: none; }
+  .lesson, .task, .how div, .module-head, .mod, .plan, .vs-row, .film, .skills li, .cta, tr, .sec-head { break-inside: avoid; }
+  .sec-head { break-after: avoid; }
+  .wrap { padding-top: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero frame">
+    <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
+    <div class="recmark"><i></i>REC</div>
+    <span class="tag">Курс AI-видео</span>
+    <h1>От нуля <span>до реалистичного кино-ролика</span></h1>
+    <p>Без камеры, актёров и съёмок. Только нейросети и правильный процесс.</p>
+    <div class="facts">
+      <div class="fact"><b>8</b><small>недель</small></div>
+      <div class="fact"><b>16</b><small>уроков по ~1 часу</small></div>
+      <div class="fact"><b>2</b><small>урока в неделю</small></div>
+      <div class="fact"><b>1</b><small>готовый ролик в финале</small></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head"><h2>Что у тебя будет <span>через 8 недель</span></h2></div>
+    <div class="result">
+      <div class="film">
+        <b>1</b>
+        <div>
+          <h3>Твой готовый кино-ролик</h3>
+          <p>Сделан тобой от первой картинки до публикации.</p>
+        </div>
+      </div>
+      <ul class="skills">
+        <li>Герой выглядит как живой человек, а не как AI</li>
+        <li>Одно лицо героя во всех сценах</li>
+        <li>Голос попадает в губы</li>
+        <li>Камера двигается, как в фильме</li>
+        <li>Склейки между сценами не видно</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Чем этот курс <span>отличается</span></h2></div>
+    <div class="vs">
+      <div class="vs-row head"><div>Как часто учат</div><div>Как учу я</div></div>
+      <div class="vs-row"><div>Обзор нейросетей по отдельности</div><div>Весь путь ролика: от идеи до публикации</div></div>
+      <div class="vs-row"><div>Видео сразу видно, что AI</div><div>Реализм: герой как живой человек</div></div>
+      <div class="vs-row"><div>Генерации сгорают впустую</div><div>Готовишь всё заранее и тратишь меньше</div></div>
+      <div class="vs-row"><div>Смотришь, как делает автор</div><div>Каждую неделю делаешь шаг своего ролика</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Как проходит <span>обучение</span></h2></div>
+    <div class="how">
+      <div><b>~1 час</b><h3>Урок в Zoom</h3><p>Вживую, 2 раза в неделю. Вопросы задаёшь сразу.</p></div>
+      <div><b>Запись</b><h3>Каждого урока</h3><p>Остаётся у тебя. В «Старте» учишься по записям в своём темпе.</p></div>
+      <div><b>1 задание</b><h3>Каждую неделю</h3><p>Это шаг твоего собственного ролика.</p></div>
+      <div><b>Проверка</b><h3>Каждого задания</h3><p>В «Практике» и «Наставнике» я проверяю всё лично.</p></div>
+    </div>
+  </section>
+
+  <section id="program">
+    <div class="sec-head"><h2>Программа <span>по неделям</span></h2></div>
+    <div class="map" aria-label="Недели курса">
+      <a href="#m1"><div class="bar"></div><span>Н1</span></a>
+      <a href="#m2"><div class="bar"></div><span>Н2</span></a>
+      <a href="#m2"><div class="bar"></div><span>Н3</span></a>
+      <a href="#m3"><div class="bar"></div><span>Н4</span></a>
+      <a href="#m4"><div class="bar"></div><span>Н5</span></a>
+      <a href="#m4"><div class="bar"></div><span>Н6</span></a>
+      <a href="#m5"><div class="bar"></div><span>Н7</span></a>
+      <a href="#final"><div class="bar fin"></div><span>Н8</span></a>
+    </div>
+    <div class="legend">
+      <span><b>Н1</b> Основа</span><span><b>Н2–3</b> Картинка</span><span><b>Н4</b> Сценарий и озвучка</span><span><b>Н5–6</b> Видео</span><span><b>Н7</b> Монтаж и публикация</span><span><b>Н8</b> Финал</span>
+    </div>
+    <div class="module" id="m1">
+      <div class="module-head"><span class="num">1</span><h3>Основа</h3><span class="when">Неделя 1</span></div>
+      <div class="week">
+        <div class="lesson">
+          <div class="n">Урок<b>1</b></div>
+          <div><h4>Какие нейросети нужны и для чего</h4><ul><li>Карта инструментов: картинка, голос, видео, монтаж</li><li>Что реально нужно новичку, а что можно пропустить</li></ul></div>
+        </div>
+        <div class="lesson">
+          <div class="n">Урок<b>2</b></div>
+          <div><h4>Сколько стоит и как не тратить деньги впустую</h4><ul><li>Какие подписки брать и на каком тарифе</li><li>Почему генерации сгорают зря и как этого избежать</li><li>Рабочий порядок: сначала картинка и голос, потом видео</li></ul></div>
+        </div>
+        <div class="task"><strong>Задание</strong>Подключить инструменты и выбрать идею своего ролика. Его ты будешь делать весь курс.</div>
+      </div>
+    </div>
+    <div class="module" id="m2">
+      <div class="module-head"><span class="num">2</span><h3>Картинка</h3><span class="when">Недели 2–3</span></div>
+      <div class="week">
+        <div class="week-label">Неделя 2</div>
+        <div class="lesson">
+          <div class="n">Урок<b>3</b></div>
+          <div><h4>Персонаж с одним лицом во всех сценах</h4><ul><li>Фото-карточка персонажа, которая держит лицо</li><li>Почему лицо «плывёт» от кадра к кадру и как это остановить</li></ul></div>
+        </div>
+        <div class="lesson">
+          <div class="n">Урок<b>4</b></div>
+          <div><h4>Одежда и детали, которые не меняются</h4><ul><li>Одежда отдельным референсом</li><li>Часы, очки, аксессуары: герой остаётся собой в каждом кадре</li></ul></div>
+        </div>
+        <div class="task"><strong>Задание</strong>Карточка героя и карточка его одежды.</div>
+      </div>
+      <div class="week">
+        <div class="week-label">Неделя 3</div>
+        <div class="lesson">
+          <div class="n">Урок<b>5</b></div>
+          <div><h4>Локации и действия, как настоящие</h4><ul><li>Локация-референс нужного ракурса</li><li>Свет, эпоха, детали</li><li>Почему нейросеть убирает «невозможные» предметы и как это учитывать</li></ul></div>
+        </div>
+        <div class="lesson">
+          <div class="n">Урок<b>6</b></div>
+          <div><h4>Первый кадр, который оживает как кино</h4><ul><li>Композиция, крупность, ракурс</li><li>Кадр, с которого видео стартует без рывков</li></ul></div>
+        </div>
+        <div class="task"><strong>Задание</strong>Локация и первый кадр твоего ролика.</div>
+      </div>
+    </div>
+    <div class="module" id="m3">
+      <div class="module-head"><span class="num">3</span><h3>Сценарий и озвучка</h3><span class="when">Неделя 4</span></div>
+      <div class="week">
+        <div class="lesson">
+          <div class="n">Урок<b>7</b></div>
+          <div><h4>Ролик, который досматривают до конца</h4><ul><li>Хук: зритель спотыкается о видео в первые секунды</li><li>Как держать интерес и не раскрыть всё сразу</li><li>Финал, после которого остаётся «вау»</li></ul></div>
+        </div>
+        <div class="lesson">
+          <div class="n">Урок<b>8</b></div>
+          <div><h4>Голос, который точно совпадает с видео</h4><ul><li>Озвучка в ElevenLabs</li><li>Замер тайминга каждой реплики</li><li>Как разложить текст по будущим генерациям</li></ul></div>
+        </div>
+        <div class="task"><strong>Задание</strong>Сценарий твоего ролика и готовая озвучка с таймингом.</div>
+      </div>
+    </div>
+    <div class="module" id="m4">
+      <div class="module-head"><span class="num">4</span><h3>Видео</h3><span class="when">Недели 5–6</span></div>
+      <div class="week">
+        <div class="week-label">Неделя 5</div>
+        <div class="lesson">
+          <div class="n">Урок<b>9</b></div>
+          <div><h4>Как объяснить нейросети, что ты хочешь</h4><ul><li>Структура промпта: кто, где, что делает, как снимает камера</li><li>Порядок референсов</li><li>Почему короткий промпт даёт некрасивое видео</li></ul></div>
+        </div>
+        <div class="lesson">
+          <div class="n">Урок<b>10</b></div>
+          <div><h4>Движение камеры, как в фильме</h4><ul><li>Наезд, проводка, через плечо, ручная камера</li><li>Где тряска добавляет живости, а где портит кадр</li></ul></div>
+        </div>
+        <div class="task"><strong>Задание</strong>Две генерации по своим карточкам.</div>
+      </div>
+      <div class="week">
+        <div class="week-label">Неделя 6</div>
+        <div class="lesson">
+          <div class="n">Урок<b>11</b></div>
+          <div><h4>Герои говорят, губы попадают в слова</h4><ul><li>Как подать свою озвучку в генерацию</li><li>Диалог двух героев: крупные планы и съёмка «восьмёркой»</li></ul></div>
+        </div>
+        <div class="lesson">
+          <div class="n">Урок<b>12</b></div>
+          <div><h4>15 секунд без заметных склеек</h4><ul><li>Как разрезать сцену на генерации</li><li>Стык: где закончить одну и с чего начать следующую</li></ul></div>
+        </div>
+        <div class="task"><strong>Задание</strong>Сцена с речью героя и генерации, которые стыкуются между собой.</div>
+      </div>
+    </div>
+    <div class="module" id="m5">
+      <div class="module-head"><span class="num">5</span><h3>Монтаж и публикация</h3><span class="when">Неделя 7</span></div>
+      <div class="week">
+        <div class="lesson">
+          <div class="n">Урок<b>13</b></div>
+          <div><h4>Сборка ролика в CapCut: звук и субтитры</h4><ul><li>Склейка генераций</li><li>Звуковые эффекты</li><li>Субтитры</li></ul></div>
+        </div>
+        <div class="lesson">
+          <div class="n">Урок<b>14</b></div>
+          <div><h4>Обложка и подпись, чтобы видео открывали</h4><ul><li>Обложка, которая читается в сетке профиля</li><li>Подпись и первая строка</li></ul></div>
+        </div>
+        <div class="task"><strong>Задание</strong>Собрать ролик целиком и сделать к нему обложку.</div>
+      </div>
+    </div>
+    <div class="module final" id="final">
+      <div class="module-head"><span class="num">★</span><h3>Финал</h3><span class="when">Неделя 8</span></div>
+      <div class="week">
+        <div class="lesson">
+          <div class="n">Урок<b>15</b></div>
+          <div><h4>Доводим ролик до готового</h4><ul><li>Разбираем слабые места каждого ролика</li><li>Что переделать точечно, не тратя лишних генераций</li></ul></div>
+        </div>
+        <div class="lesson">
+          <div class="n">Урок<b>16</b></div>
+          <div><h4>Твой готовый ролик и мой разбор</h4><ul><li>Каждый показывает свой ролик</li><li>Разбор: что получилось сильно и что улучшить в следующем</li></ul></div>
+        </div>
+        <div class="task"><strong>Итог</strong>Твой готовый ролик, сделанный от первой картинки до публикации.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="plans">
+    <div class="sec-head"><h2>Тарифы</h2></div>
+    <div class="plans">
+      <div class="plan"><h3>Старт</h3><div class="price">$350</div><p>Учишься сам по записям, в своём темпе</p></div>
+      <div class="plan best"><span class="badge">Рекомендую</span><h3>Практик</h3><div class="price">$500</div><p>Учишься вживую со мной, я проверяю каждый шаг</p></div>
+      <div class="plan"><h3>Наставник</h3><div class="price">$1000</div><p>Всё из «Практика» + мой личный контроль до результата и продвижение в Instagram</p></div>
+    </div>
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <thead><tr><th>Что входит</th><th>Старт</th><th class="hl">Практик</th><th>Наставник</th></tr></thead>
+        <tbody>
+          <tr><td>16 уроков в записи</td><td><span class="y">✓</span></td><td class="hl"><span class="y">✓</span></td><td><span class="y">✓</span></td></tr>
+          <tr><td>Бонус: как зарабатывать на AI-видео</td><td><span class="y">✓</span></td><td class="hl"><span class="y">✓</span></td><td><span class="y">✓</span></td></tr>
+          <tr><td>Уроки вживую в Zoom, ~1 час, 2 раза в неделю</td><td><span class="no">—</span></td><td class="hl"><span class="y">✓</span></td><td><span class="y">✓</span></td></tr>
+          <tr><td>Проверка каждого задания</td><td><span class="no">—</span></td><td class="hl"><span class="y">✓</span></td><td><span class="y">✓</span></td></tr>
+          <tr><td>Личный разбор твоего ролика</td><td><span class="no">—</span></td><td class="hl"><span class="y">✓</span></td><td><span class="y">✓</span></td></tr>
+          <tr><td>Личный контроль: я лично веду тебя до готового ролика</td><td><span class="no">—</span></td><td class="hl"><span class="no">—</span></td><td><span class="y">✓</span></td></tr>
+          <tr><td>Продвижение в Instagram: показы Reels, профиль, серии</td><td><span class="no">—</span></td><td class="hl"><span class="no">—</span></td><td><span class="y">✓</span></td></tr>
+          <tr><td>4 личных созвона один на один</td><td><span class="no">—</span></td><td class="hl"><span class="no">—</span></td><td><span class="y">✓</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="need"><b>Понадобится:</b> компьютер или телефон и подписки на нейросети (оплачиваются отдельно, что выбрать, покажу на первых уроках).</div>
+  </section>
+
+  <div class="cta">
+    <div>
+      <h2>Сделай свой первый кино-ролик</h2>
+      <p>Напиши мне в директ «КУРС»</p>
+    </div>
+    <a href="https://www.instagram.com/serdar_agam/">@serdar_agam</a>
+  </div>
+
+  <footer>Сердар Агам · курс по AI-видео</footer>
+</div>
+</body>
+</html>

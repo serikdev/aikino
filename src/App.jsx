@@ -1,0 +1,642 @@
+import { useEffect, useRef, useState } from "react";
+import {
+  facts,
+  skills,
+  versus,
+  how,
+  weekMap,
+  legend,
+  modules,
+  plans,
+  compare,
+} from "./data.js";
+import { TELEGRAM_URL, INSTAGRAM_URL, INSTAGRAM_HANDLE } from "./links.js";
+
+/* ---------- Иконки ---------- */
+
+function TelegramIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M21.94 4.6 18.9 19.2c-.23 1.02-.83 1.27-1.68.79l-4.64-3.42-2.24 2.16c-.25.25-.46.46-.93.46l.33-4.72 8.6-7.77c.37-.33-.08-.52-.58-.19L7.13 13.2l-4.58-1.43c-1-.31-1.02-1 .2-1.47l17.9-6.9c.83-.31 1.56.19 1.29 1.2z"
+      />
+    </svg>
+  );
+}
+
+function InstagramIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <rect
+        x="3"
+        y="3"
+        width="18"
+        height="18"
+        rx="5.2"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" strokeWidth="2" />
+      <circle cx="17.3" cy="6.7" r="1.25" fill="currentColor" />
+    </svg>
+  );
+}
+
+function Arrow() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+      <path
+        d="M7 17 17 7M9 7h8v8"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/* ---------- Кнопки соцсетей ---------- */
+
+function SocialButton({ kind, variant = "solid", children, className = "" }) {
+  const isTg = kind === "telegram";
+  return (
+    <a
+      className={`btn btn-${variant} ${className}`}
+      href={isTg ? TELEGRAM_URL : INSTAGRAM_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {isTg ? <TelegramIcon /> : <InstagramIcon />}
+      <span>{children ?? (isTg ? "Telegram" : "Instagram")}</span>
+      {variant !== "icon" && <Arrow />}
+    </a>
+  );
+}
+
+/* ---------- Появление при скролле ---------- */
+
+function Reveal({ as: Tag = "div", delay = 0, className = "", children, ...rest }) {
+  const ref = useRef(null);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setShown(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShown(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <Tag
+      ref={ref}
+      className={`reveal ${shown ? "is-in" : ""} ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
+      {...rest}
+    >
+      {children}
+    </Tag>
+  );
+}
+
+function SectionHead({ children }) {
+  return (
+    <Reveal className="sec-head">
+      <h2>{children}</h2>
+    </Reveal>
+  );
+}
+
+/* ---------- Шапка ---------- */
+
+function Nav() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <nav className={`nav ${scrolled ? "is-scrolled" : ""}`}>
+      <div className="nav-inner">
+        <a className="brand" href="#top">
+          <span className="brand-dot" />
+          Сердар Агам
+        </a>
+        <div className="nav-links">
+          <a href="#program">Программа</a>
+          <a href="#plans">Тарифы</a>
+        </div>
+        <div className="nav-social">
+          <a
+            className="icon-btn"
+            href={TELEGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Telegram"
+          >
+            <TelegramIcon />
+          </a>
+          <a
+            className="icon-btn"
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <InstagramIcon />
+          </a>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+/* ---------- Первый экран ---------- */
+
+function Hero() {
+  return (
+    <header className="hero" id="top">
+      <div className="viewfinder" aria-hidden="true">
+        <i className="c tl" />
+        <i className="c tr" />
+        <i className="c bl" />
+        <i className="c br" />
+      </div>
+      <div className="hero-top">
+        <span className="rec">
+          <i />
+          REC
+        </span>
+        <span className="pill">Курс AI-видео</span>
+      </div>
+      <h1>
+        От нуля <span>до реалистичного кино-ролика</span>
+      </h1>
+      <p className="lead">
+        Без камеры, актёров и съёмок. Только нейросети и правильный процесс.
+      </p>
+      <div className="hero-cta">
+        <SocialButton kind="telegram" variant="solid">
+          Бесплатный разбор
+        </SocialButton>
+        <SocialButton kind="instagram" variant="ghost">
+          Мои результаты
+        </SocialButton>
+      </div>
+      <p className="hero-note">
+        <b>Разбор бесплатный.</b> Денег за него не берём.
+      </p>
+      <div className="facts">
+        {facts.map((f) => (
+          <div className="fact" key={f.label}>
+            <b>{f.n}</b>
+            <small>{f.label}</small>
+          </div>
+        ))}
+      </div>
+    </header>
+  );
+}
+
+/* ---------- Бесплатный разбор ---------- */
+
+const freeSteps = [
+  {
+    title: "Разберём твой Instagram",
+    text: "Посмотрим аккаунт и скажем, что уже работает, а что мешает расти.",
+  },
+  {
+    title: "Узнаем твой формат",
+    text: "Что ты хочешь снимать и для чего: блог, реклама, свой проект.",
+  },
+  {
+    title: "Честно скажем, подходит ли курс",
+    text: "Если не подходит, скажем прямо. Чтобы ты не потратил деньги впустую.",
+  },
+];
+
+function FreeReview() {
+  return (
+    <section id="free">
+      <Reveal className="free">
+        <span className="free-badge">Бесплатно · 0 $</span>
+        <h2>
+          Сначала разбор. <span>Платить не нужно</span>
+        </h2>
+        <p className="free-lead">
+          Не покупай курс вслепую. Сначала мы бесплатно разберём твой Instagram и поймём,
+          подходит ли тебе обучение.
+        </p>
+        <ol className="free-steps">
+          {freeSteps.map((s, i) => (
+            <li key={s.title}>
+              <b>0{i + 1}</b>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))}
+        </ol>
+        <p className="free-quote">
+          Я сам долго боялся и начал очень поздно. Поэтому первый шаг для тебя{" "}
+          <b>бесплатный</b>: не бойся, денег за разбор мы не берём.
+        </p>
+        <div className="free-cta">
+          <SocialButton kind="telegram" variant="solid">
+            Записаться на разбор
+          </SocialButton>
+          <SocialButton kind="instagram" variant="ghost">
+            Смотри мои результаты
+          </SocialButton>
+        </div>
+        <p className="free-note">
+          Напиши в Telegram слово <b>«РАЗБОР»</b>, это ни к чему не обязывает.
+        </p>
+      </Reveal>
+    </section>
+  );
+}
+
+/* ---------- Результат ---------- */
+
+function Result() {
+  return (
+    <section>
+      <SectionHead>
+        Что у тебя будет <span>через 8 недель</span>
+      </SectionHead>
+      <div className="result">
+        <Reveal className="film">
+          <b>1</b>
+          <div>
+            <h3>Твой готовый кино-ролик</h3>
+            <p>Сделан тобой от первой картинки до публикации.</p>
+          </div>
+        </Reveal>
+        <ul className="skills">
+          {skills.map((s, i) => (
+            <Reveal as="li" key={s} delay={i * 60}>
+              <span className="check">✓</span>
+              {s}
+            </Reveal>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Отличие ---------- */
+
+function Versus() {
+  return (
+    <section>
+      <SectionHead>
+        Чем этот курс <span>отличается</span>
+      </SectionHead>
+      <Reveal className="vs">
+        <div className="vs-row head">
+          <div>Как часто учат</div>
+          <div>Как учу я</div>
+        </div>
+        {versus.map(([bad, good]) => (
+          <div className="vs-row" key={bad}>
+            <div>{bad}</div>
+            <div>{good}</div>
+          </div>
+        ))}
+      </Reveal>
+    </section>
+  );
+}
+
+/* ---------- Как проходит ---------- */
+
+function How() {
+  return (
+    <section>
+      <SectionHead>
+        Как проходит <span>обучение</span>
+      </SectionHead>
+      <div className="how">
+        {how.map((h, i) => (
+          <Reveal className="card" key={h.title} delay={i * 70}>
+            <b>{h.big}</b>
+            <h3>{h.title}</h3>
+            <p>{h.text}</p>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Мини-группа ---------- */
+
+// Сколько человек в одной мини-группе внутри потока. Меняется только здесь.
+const GROUP_SIZE = 10;
+
+const groupPerks = [
+  {
+    big: "Свой чат",
+    title: `На ${GROUP_SIZE} человек`,
+    text: "Закрытый чат твоей мини-группы в Telegram. Здесь не стыдно задать любой вопрос.",
+  },
+  {
+    big: "Тебя видно",
+    title: "В своей мини-группе",
+    text: "В маленькой группе видно каждого участника и каждый ролик. Твой вопрос не утонет в ленте.",
+  },
+  {
+    big: "Ты не один",
+    title: "Рядом такие же новички",
+    text: "Идеи, работы и поддержка от группы. Вместе проще дойти до финала.",
+  },
+];
+
+function Group() {
+  return (
+    <section id="group">
+      <SectionHead>
+        Своя мини-группа <span>и закрытый чат</span>
+      </SectionHead>
+      <div className="group">
+        <Reveal className="film group-main">
+          <b>{GROUP_SIZE}</b>
+          <div>
+            <h3>Человек в твоей мини-группе</h3>
+            <p>
+              Маленькая группа, где тебя знают, слышат и поддерживают.
+            </p>
+          </div>
+        </Reveal>
+        <div className="group-perks">
+          {groupPerks.map((g, i) => (
+            <Reveal className="card" key={g.big} delay={i * 70}>
+              <b>{g.big}</b>
+              <h3>{g.title}</h3>
+              <p>{g.text}</p>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Программа ---------- */
+
+function Module({ m, open, onToggle }) {
+  return (
+    <div className={`module ${m.final ? "final" : ""} ${open ? "is-open" : ""}`} id={m.id}>
+      <button
+        type="button"
+        className="module-head"
+        onClick={onToggle}
+        aria-expanded={open}
+        aria-controls={`${m.id}-body`}
+      >
+        <span className="num">{m.num}</span>
+        <h3>{m.title}</h3>
+        <span className="when">{m.when}</span>
+        <span className="plus" aria-hidden="true" />
+      </button>
+      <div className="module-body" id={`${m.id}-body`}>
+        <div className="module-inner">
+          {m.weeks.map((w, wi) => (
+            <div className="week" key={wi}>
+              {w.label && <div className="week-label">{w.label}</div>}
+              {w.lessons.map((l) => (
+                <div className="lesson" key={l.n}>
+                  <div className="n">
+                    Урок<b>{l.n}</b>
+                  </div>
+                  <div>
+                    <h4>{l.title}</h4>
+                    <ul>
+                      {l.points.map((p) => (
+                        <li key={p}>{p}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+              <div className="task">
+                <strong>{w.taskLabel ?? "Задание"}</strong>
+                {w.task}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Program() {
+  const [open, setOpen] = useState(() => new Set(["m1"]));
+
+  const toggle = (id) =>
+    setOpen((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+
+  const jump = (e, id) => {
+    e.preventDefault();
+    setOpen((prev) => new Set(prev).add(id));
+    requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
+
+  const allOpen = open.size === modules.length;
+
+  return (
+    <section id="program">
+      <SectionHead>
+        Программа <span>по неделям</span>
+      </SectionHead>
+      <Reveal>
+        <div className="map" aria-label="Недели курса">
+          {weekMap.map((w) => (
+            <a href={`#${w.to}`} key={w.w} onClick={(e) => jump(e, w.to)}>
+              <div className={`bar ${w.fin ? "fin" : ""} ${open.has(w.to) ? "on" : ""}`} />
+              <span>{w.w}</span>
+            </a>
+          ))}
+        </div>
+        <div className="legend">
+          {legend.map(([k, v]) => (
+            <span key={k}>
+              <b>{k}</b> {v}
+            </span>
+          ))}
+        </div>
+      </Reveal>
+      <div className="modules">
+        {modules.map((m, i) => (
+          <Reveal key={m.id} delay={i * 50}>
+            <Module m={m} open={open.has(m.id)} onToggle={() => toggle(m.id)} />
+          </Reveal>
+        ))}
+      </div>
+      <button
+        type="button"
+        className="expand-all"
+        onClick={() => setOpen(allOpen ? new Set() : new Set(modules.map((m) => m.id)))}
+      >
+        {allOpen ? "Свернуть все уроки" : "Показать все 16 уроков"}
+      </button>
+    </section>
+  );
+}
+
+/* ---------- Тарифы ---------- */
+
+function Plans() {
+  return (
+    <section id="plans">
+      <SectionHead>Тарифы</SectionHead>
+      <div className="plans">
+        {plans.map((p, i) => (
+          <Reveal className={`plan ${p.best ? "best" : ""}`} key={p.name} delay={i * 80}>
+            {p.best && <span className="badge">Рекомендую</span>}
+            <h3>{p.name}</h3>
+            <div className="price">{p.price}</div>
+            <div className="price-rub">{p.rub}</div>
+            <p>{p.text}</p>
+          </Reveal>
+        ))}
+      </div>
+      <Reveal className="cmp-wrap">
+        <table className="cmp">
+          <thead>
+            <tr>
+              <th>Что входит</th>
+              <th>Старт</th>
+              <th className="hl">Практик</th>
+              <th>Наставник</th>
+            </tr>
+          </thead>
+          <tbody>
+            {compare.map(([label, a, b, c]) => (
+              <tr key={label}>
+                <td>{label}</td>
+                {[a, b, c].map((v, i) => (
+                  <td key={i} className={i === 1 ? "hl" : ""}>
+                    {v ? <span className="y">✓</span> : <span className="no">—</span>}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Reveal>
+      <Reveal className="need">
+        <b>Понадобится:</b> компьютер или телефон и подписки на нейросети (оплачиваются
+        отдельно, что выбрать, покажу на первых уроках).
+      </Reveal>
+    </section>
+  );
+}
+
+/* ---------- Призыв ---------- */
+
+function Cta() {
+  return (
+    <Reveal className="cta">
+      <div>
+        <h2>Сделай свой первый кино-ролик</h2>
+        <p>Начни с бесплатного разбора. Денег за него не берём.</p>
+      </div>
+      <div className="cta-btns">
+        <SocialButton kind="telegram" variant="dark">
+          Бесплатный разбор
+        </SocialButton>
+        <SocialButton kind="instagram" variant="dark">
+          {INSTAGRAM_HANDLE}
+        </SocialButton>
+      </div>
+    </Reveal>
+  );
+}
+
+/* ---------- Нижняя панель на телефоне ---------- */
+
+function Dock() {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const onScroll = () => {
+      const nearBottom =
+        window.innerHeight + window.scrollY > document.documentElement.scrollHeight - 420;
+      setVisible(window.scrollY > 560 && !nearBottom);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <div className={`dock ${visible ? "is-visible" : ""}`}>
+      <SocialButton kind="telegram" variant="solid">
+        Бесплатный разбор
+      </SocialButton>
+      <SocialButton kind="instagram" variant="ghost" />
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <>
+      <div className="bg" aria-hidden="true">
+        <div className="glow g1" />
+        <div className="glow g2" />
+        <div className="grid" />
+      </div>
+      <Nav />
+      <main className="wrap">
+        <Hero />
+        <FreeReview />
+        <Result />
+        <Versus />
+        <How />
+        <Group />
+        <Program />
+        <Plans />
+        <Cta />
+        <footer>
+          <span>Сердар Агам · курс по AI-видео</span>
+          <span className="footer-social">
+            <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
+              Telegram
+            </a>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+              Instagram
+            </a>
+          </span>
+        </footer>
+      </main>
+      <Dock />
+    </>
+  );
+}
