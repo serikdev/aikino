@@ -202,7 +202,7 @@ function Hero() {
         </SocialButton>
       </div>
       <p className="hero-note">
-        <b>Разбор бесплатный.</b> Денег за него не берём.
+        <b>Разбор бесплатный.</b> Сообщение уже написано, просто нажми «Отправить».
       </p>
       <div className="facts">
         {facts.map((f) => (
@@ -262,6 +262,10 @@ function FreeReview() {
             Смотри мои результаты
           </SocialButton>
         </div>
+        <p className="free-note">
+          Нажми кнопку: в Telegram уже будет написано <b>«Привет, хочу разбор»</b>.
+          Тебе останется нажать «Отправить».
+        </p>
       </Reveal>
     </section>
   );
