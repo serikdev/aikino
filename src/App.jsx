@@ -5,12 +5,12 @@ import {
   versus,
   how,
   weekMap,
-  legend,
   modules,
   plans,
   compare,
 } from "./data.js";
 import { TELEGRAM_URL, INSTAGRAM_URL, INSTAGRAM_HANDLE } from "./links.js";
+import { PromoBar, PlansPromo, Popup, isPromoActive } from "./Promo.jsx";
 
 /* ---------- Иконки ---------- */
 
@@ -138,7 +138,7 @@ function Nav() {
       <div className="nav-inner">
         <a className="brand" href="#top">
           <span className="brand-dot" />
-          Сердар Агам
+          serdar_agam
         </a>
         <div className="nav-links">
           <a href="#program">Программа</a>
@@ -221,15 +221,15 @@ function Hero() {
 const freeSteps = [
   {
     title: "Разберём твой Instagram",
-    text: "Посмотрим аккаунт и скажем, что уже работает, а что мешает расти.",
+    text: "Что уже работает, а что мешает расти.",
   },
   {
     title: "Узнаем твой формат",
-    text: "Что ты хочешь снимать и для чего: блог, реклама, свой проект.",
+    text: "Что ты хочешь снимать и для чего.",
   },
   {
     title: "Честно скажем, подходит ли курс",
-    text: "Если не подходит, скажем прямо. Чтобы ты не потратил деньги впустую.",
+    text: "Если не подходит, скажем прямо.",
   },
 ];
 
@@ -241,10 +241,6 @@ function FreeReview() {
         <h2>
           Сначала разбор. <span>Платить не нужно</span>
         </h2>
-        <p className="free-lead">
-          Не покупай курс вслепую. Сначала мы бесплатно разберём твой Instagram и поймём,
-          подходит ли тебе обучение.
-        </p>
         <ol className="free-steps">
           {freeSteps.map((s, i) => (
             <li key={s.title}>
@@ -266,9 +262,6 @@ function FreeReview() {
             Смотри мои результаты
           </SocialButton>
         </div>
-        <p className="free-note">
-          Напиши в Telegram слово <b>«РАЗБОР»</b>, это ни к чему не обязывает.
-        </p>
       </Reveal>
     </section>
   );
@@ -292,7 +285,7 @@ function Result() {
         </Reveal>
         <ul className="skills">
           {skills.map((s, i) => (
-            <Reveal as="li" key={s} delay={i * 60}>
+            <Reveal as="li" key={s} delay={i * 30}>
               <span className="check">✓</span>
               {s}
             </Reveal>
@@ -337,7 +330,7 @@ function How() {
       </SectionHead>
       <div className="how">
         {how.map((h, i) => (
-          <Reveal className="card" key={h.title} delay={i * 70}>
+          <Reveal className="card" key={h.title} delay={i * 30}>
             <b>{h.big}</b>
             <h3>{h.title}</h3>
             <p>{h.text}</p>
@@ -382,14 +375,11 @@ function Group() {
           <b>{GROUP_SIZE}</b>
           <div>
             <h3>Человек в твоей мини-группе</h3>
-            <p>
-              Маленькая группа, где тебя знают, слышат и поддерживают.
-            </p>
           </div>
         </Reveal>
         <div className="group-perks">
           {groupPerks.map((g, i) => (
-            <Reveal className="card" key={g.big} delay={i * 70}>
+            <Reveal className="card" key={g.big} delay={i * 30}>
               <b>{g.big}</b>
               <h3>{g.title}</h3>
               <p>{g.text}</p>
@@ -484,17 +474,10 @@ function Program() {
             </a>
           ))}
         </div>
-        <div className="legend">
-          {legend.map(([k, v]) => (
-            <span key={k}>
-              <b>{k}</b> {v}
-            </span>
-          ))}
-        </div>
       </Reveal>
       <div className="modules">
         {modules.map((m, i) => (
-          <Reveal key={m.id} delay={i * 50}>
+          <Reveal key={m.id} delay={i * 30}>
             <Module m={m} open={open.has(m.id)} onToggle={() => toggle(m.id)} />
           </Reveal>
         ))}
@@ -513,16 +496,21 @@ function Program() {
 /* ---------- Тарифы ---------- */
 
 function Plans() {
+  const promo = isPromoActive();
   return (
     <section id="plans">
       <SectionHead>Тарифы</SectionHead>
+      <Reveal>
+        <PlansPromo />
+      </Reveal>
       <div className="plans">
         {plans.map((p, i) => (
-          <Reveal className={`plan ${p.best ? "best" : ""}`} key={p.name} delay={i * 80}>
+          <Reveal className={`plan ${p.best ? "best" : ""}`} key={p.name} delay={i * 30}>
             {p.best && <span className="badge">Рекомендую</span>}
             <h3>{p.name}</h3>
-            <div className="price">{p.price}</div>
-            <div className="price-rub">{p.rub}</div>
+            {promo && <div className="price-old">{p.price}</div>}
+            <div className="price">{promo ? p.sale : p.price}</div>
+            <div className="price-rub">{promo ? p.saleRub : p.rub}</div>
             <p>{p.text}</p>
           </Reveal>
         ))}
@@ -552,8 +540,7 @@ function Plans() {
         </table>
       </Reveal>
       <Reveal className="need">
-        <b>Понадобится:</b> компьютер или телефон и подписки на нейросети (оплачиваются
-        отдельно, что выбрать, покажу на первых уроках).
+        <b>Понадобится:</b> компьютер или телефон.
       </Reveal>
     </section>
   );
@@ -609,10 +596,9 @@ export default function App() {
   return (
     <>
       <div className="bg" aria-hidden="true">
-        <div className="glow g1" />
-        <div className="glow g2" />
         <div className="grid" />
       </div>
+      <PromoBar />
       <Nav />
       <main className="wrap">
         <Hero />
@@ -625,7 +611,7 @@ export default function App() {
         <Plans />
         <Cta />
         <footer>
-          <span>Сердар Агам · курс по AI-видео</span>
+          <span>serdar_agam · курс по AI-видео</span>
           <span className="footer-social">
             <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer">
               Telegram
@@ -637,6 +623,7 @@ export default function App() {
         </footer>
       </main>
       <Dock />
+      <Popup />
     </>
   );
 }
