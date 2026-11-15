@@ -2,7 +2,14 @@ export const facts = [
   { n: "8", label: "недель" },
   { n: "16", label: "уроков по ~1 часу" },
   { n: "2", label: "урока в неделю" },
-  { n: "1", label: "готовый ролик в финале" },
+  { n: "100%", label: "практика, а не теория" },
+];
+
+// Мои ролики: короткие фрагменты без звука из папки public/videos.
+export const myVideos = [
+  { src: "/videos/1.mp4", poster: "/videos/1.jpg" },
+  { src: "/videos/2.mp4", poster: "/videos/2.jpg" },
+  { src: "/videos/3.mp4", poster: "/videos/3.jpg" },
 ];
 
 export const skills = [

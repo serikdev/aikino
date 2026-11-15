@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   facts,
   skills,
+  myVideos,
   versus,
   how,
   weekMap,
@@ -202,7 +203,7 @@ function Hero() {
         </SocialButton>
       </div>
       <p className="hero-note">
-        <b>Разбор бесплатный.</b> Сообщение уже написано, просто нажми «Отправить».
+        <b>Разбор бесплатный.</b> Денег за него не берём.
       </p>
       <div className="facts">
         {facts.map((f) => (
@@ -262,10 +263,6 @@ function FreeReview() {
             Смотри мои результаты
           </SocialButton>
         </div>
-        <p className="free-note">
-          Нажми кнопку: в Telegram уже будет написано <b>«Привет, хочу разбор»</b>.
-          Тебе останется нажать «Отправить».
-        </p>
       </Reveal>
     </section>
   );
@@ -281,10 +278,13 @@ function Result() {
       </SectionHead>
       <div className="result">
         <Reveal className="film">
-          <b>1</b>
+          <svg className="film-play" viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="32" fill="currentColor" />
+            <path d="M26 20.5v23a1.5 1.5 0 0 0 2.3 1.3l18-11.5a1.5 1.5 0 0 0 0-2.6l-18-11.5a1.5 1.5 0 0 0-2.3 1.3z" fill="#d1fe17" />
+          </svg>
           <div>
-            <h3>Твой готовый кино-ролик</h3>
-            <p>Сделан тобой от первой картинки до публикации.</p>
+            <h3>Киношные ролики</h3>
+            <p>Ты делаешь их уже в процессе обучения. Это практикум, а не теория.</p>
           </div>
         </Reveal>
         <ul className="skills">
@@ -296,6 +296,55 @@ function Result() {
           ))}
         </ul>
       </div>
+    </section>
+  );
+}
+
+/* ---------- Мои ролики ---------- */
+
+// Короткий фрагмент без звука. Играет по кругу, только пока виден на экране.
+function Clip({ src, poster }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const video = ref.current;
+    if (!video || typeof IntersectionObserver === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(video);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div className="clip">
+      <video ref={ref} src={src} poster={poster} muted loop playsInline preload="none" />
+      <span className="clip-tag">AI</span>
+    </div>
+  );
+}
+
+function MyWorks() {
+  if (myVideos.length === 0) return null;
+  return (
+    <section id="works">
+      <SectionHead>
+        Больше миллиона просмотров. <span>Ты будешь уметь так же</span>
+      </SectionHead>
+      <Reveal className="clips">
+        {myVideos.map((v) => (
+          <Clip key={v.src} {...v} />
+        ))}
+      </Reveal>
+      <Reveal as="p" className="clips-note">
+        Это мои ролики. Ни камеры, ни актёров: только нейросети.
+      </Reveal>
     </section>
   );
 }
@@ -614,6 +663,7 @@ export default function App() {
         <Hero />
         <FreeReview />
         <Result />
+        <MyWorks />
         <Versus />
         <How />
         <Group />
