@@ -384,7 +384,7 @@ function StudentWorks() {
   return (
     <section id="students">
       <SectionHead>
-        Результаты <span>моих учеников</span>
+        Ученик, <span>который обогнал меня</span>
       </SectionHead>
 
       <Reveal className="case">

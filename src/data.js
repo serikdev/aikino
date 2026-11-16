@@ -327,7 +327,7 @@ export const plans = [
 // [что входит, Старт, Практик, Наставник]
 export const compare = [
   ["16 уроков в записи", true, true, true],
-  ["Бонус: как зарабатывать на AI-видео", true, true, true],
+  ["Бонус: как зарабатывать на AI-видео", false, true, true],
   ["Уроки вживую в Zoom, ~1 час, 2 раза в неделю", false, true, true],
   ["Проверка каждого задания", false, true, true],
   ["Личный разбор твоего ролика", false, true, true],
