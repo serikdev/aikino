@@ -5,6 +5,7 @@ import {
   myVideos,
   studentCase,
   lessonThreeVideos,
+  reviews,
   versus,
   how,
   weekMap,
@@ -383,8 +384,11 @@ function StudentWorks() {
   return (
     <section id="students">
       <SectionHead>
-        Так снимают <span>мои ученики</span>
+        Результаты <span>моих учеников</span>
       </SectionHead>
+      <Reveal className="students-pill">
+        <span className="free-badge">Всё это сделано в начале обучения</span>
+      </Reveal>
 
       <Reveal className="case">
         <div className="clip case-clip" ref={wrap}>
@@ -421,14 +425,8 @@ function StudentWorks() {
         </div>
       </Reveal>
 
-      <Reveal as="h3" className="sub-head">
-        А так снимают уже <span>после третьего урока</span>
-      </Reveal>
-      <Reveal>
-        <ClipRow videos={lessonThreeVideos} tag="Урок 3" />
-      </Reveal>
-      <Reveal as="p" className="clips-note">
-        Сделано во время обучения.
+      <Reveal className="students-row">
+        <ClipRow videos={lessonThreeVideos} tag="Работа ученика" />
       </Reveal>
 
       <Reveal className="students-cta">
@@ -436,6 +434,40 @@ function StudentWorks() {
           Хочу так же
         </SocialButton>
       </Reveal>
+    </section>
+  );
+}
+
+/* ---------- Отзывы ---------- */
+
+function Reviews() {
+  return (
+    <section id="reviews">
+      <SectionHead>
+        Что говорят <span>ученики</span>
+      </SectionHead>
+      <div className="reviews">
+        {reviews.map((r) => (
+          <Reveal as="figure" className="review" key={r.name}>
+            <figcaption>
+              <span className="review-avatar" aria-hidden="true">
+                {r.name[0].toUpperCase()}
+              </span>
+              <span>
+                <b>{r.name}</b>
+                <small>{r.role ?? "Ученик курса"}</small>
+              </span>
+            </figcaption>
+            <img
+              src={r.img}
+              alt={`Отзыв: ${r.name}`}
+              width={r.w}
+              height={r.h}
+              loading="lazy"
+            />
+          </Reveal>
+        ))}
+      </div>
     </section>
   );
 }
@@ -756,6 +788,7 @@ export default function App() {
         <Result />
         <MyWorks />
         <StudentWorks />
+        <Reviews />
         <Versus />
         <How />
         <Group />

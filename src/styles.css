@@ -588,3 +588,26 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12
   .case-side { padding: 14px; border-radius: var(--r-md); }
   .students-cta .btn { width: 100%; }
 }
+
+/* ---------- Результаты учеников: плашка и ряд ---------- */
+.students-pill { margin: -10px 0 22px; }
+.students-pill .free-badge { height: auto; min-height: 34px; padding: 8px 14px; line-height: 1.3; }
+.students-row { margin-top: 16px; }
+#students .clips { max-width: none; }
+
+/* ---------- Отзывы ---------- */
+.reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: start; }
+.review {
+  margin: 0; padding: 14px;
+  border: 1px solid var(--line); border-radius: var(--r-md);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+}
+.review figcaption { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.review-avatar {
+  flex: none; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%;
+  background: var(--accent); color: var(--ink); font-family: var(--display); font-weight: 700; font-size: 16px;
+}
+.review b { display: block; font-family: var(--display); font-weight: 600; font-size: 14px; letter-spacing: -0.01em; }
+.review small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+.review img { display: block; width: 100%; height: auto; border-radius: var(--r-sm); }
+@media (max-width: 860px) { .reviews { grid-template-columns: 1fr; gap: 10px; } }

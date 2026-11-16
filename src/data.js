@@ -23,9 +23,16 @@ export const studentCase = {
 
 // Ролики учеников, сделанные после третьего урока.
 export const lessonThreeVideos = [
+  { src: "/videos/s4.mp4", poster: "/videos/s4.jpg" }, // первый ролик на телефоне самый большой
   { src: "/videos/s2.mp4", poster: "/videos/s2.jpg" },
   { src: "/videos/s3.mp4", poster: "/videos/s3.jpg" },
-  { src: "/videos/s4.mp4", poster: "/videos/s4.jpg" },
+];
+
+// Отзывы: обрезанные скриншоты переписки из папки public/reviews.
+export const reviews = [
+  { name: "Salmoni Fors", img: "/reviews/1.jpg", w: 500, h: 290 },
+  { name: "Guwanch", img: "/reviews/2.jpg", w: 516, h: 216 },
+  { name: "sunnahri", role: "Ученица курса", img: "/reviews/3.jpg", w: 500, h: 264 },
 ];
 
 export const skills = [
