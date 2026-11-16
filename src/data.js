@@ -12,11 +12,20 @@ export const myVideos = [
   { src: "/videos/3.mp4", poster: "/videos/3.jpg" },
 ];
 
-// Работы учеников: файлы из папки public/videos, без звука.
-export const studentVideos = [
-  { src: "/videos/s1.mp4", poster: "/videos/s1.jpg" },
+// Кейс ученика: ролик и скриншот шапки его профиля.
+export const studentCase = {
+  src: "/videos/s1.mp4",
+  poster: "/videos/s1.jpg",
+  handle: "@ssalmoni.fors",
+  profileUrl: "https://www.instagram.com/ssalmoni.fors/",
+  profileShot: "/student-profile.jpg",
+};
+
+// Ролики учеников, сделанные после третьего урока.
+export const lessonThreeVideos = [
   { src: "/videos/s2.mp4", poster: "/videos/s2.jpg" },
   { src: "/videos/s3.mp4", poster: "/videos/s3.jpg" },
+  { src: "/videos/s4.mp4", poster: "/videos/s4.jpg" },
 ];
 
 export const skills = [

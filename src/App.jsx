@@ -3,7 +3,8 @@ import {
   facts,
   skills,
   myVideos,
-  studentVideos,
+  studentCase,
+  lessonThreeVideos,
   versus,
   how,
   weekMap,
@@ -301,32 +302,51 @@ function Result() {
   );
 }
 
-/* ---------- Мои ролики ---------- */
+/* ---------- Ролики ---------- */
 
-// Короткий фрагмент без звука. Играет по кругу, только пока виден на экране.
-function Clip({ src, poster }) {
+// Следит, виден ли блок на экране: вне экрана видео не играет
+function useInView(threshold = 0.4) {
   const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [threshold]);
+  return [ref, inView];
+}
+
+/* Ряд роликов: все играют одновременно, пока ряд на экране */
+function ClipRow({ videos, tag }) {
+  const [wrap, inView] = useInView(0.25);
+  const els = useRef([]);
 
   useEffect(() => {
-    const video = ref.current;
-    if (!video || typeof IntersectionObserver === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) video.play().catch(() => {});
-        else video.pause();
-      },
-      { threshold: 0.4 }
-    );
-    io.observe(video);
-    return () => io.disconnect();
-  }, []);
+    els.current.forEach((v) => {
+      if (!v) return;
+      if (inView) v.play().catch(() => {});
+      else v.pause();
+    });
+  }, [inView]);
 
   return (
-    <div className="clip">
-      <video ref={ref} src={src} poster={poster} muted loop playsInline preload="none" />
-      <span className="clip-tag">AI</span>
+    <div className="clips" ref={wrap}>
+      {videos.map((v, i) => (
+        <div className="clip" key={v.src}>
+          <video
+            ref={(el) => (els.current[i] = el)}
+            src={v.src}
+            poster={v.poster}
+            muted
+            loop
+            playsInline
+            preload="none"
+          />
+          <span className="clip-tag">{tag}</span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -338,10 +358,8 @@ function MyWorks() {
       <SectionHead>
         Больше миллиона просмотров. <span>Ты будешь уметь так же</span>
       </SectionHead>
-      <Reveal className="clips">
-        {myVideos.map((v) => (
-          <Clip key={v.src} {...v} />
-        ))}
+      <Reveal>
+        <ClipRow videos={myVideos} tag="AI" />
       </Reveal>
       <Reveal as="p" className="clips-note">
         Это мои ролики. Ни камеры, ни актёров: только нейросети.
@@ -350,83 +368,73 @@ function MyWorks() {
   );
 }
 
-/* ---------- Работы учеников: карусель ---------- */
-
+/* Работы учеников: кейс и ролики после третьего урока */
 function StudentWorks() {
-  const n = studentVideos.length;
-  const [active, setActive] = useState(0);
-  const [inView, setInView] = useState(false);
-  const wrap = useRef(null);
-  const videos = useRef([]);
+  const [wrap, inView] = useInView();
+  const video = useRef(null);
 
-  // Следим, виден ли блок: вне экрана ничего не играет
   useEffect(() => {
-    const el = wrap.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), {
-      threshold: 0.4,
-    });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  // Все ролики играют одновременно, пока блок на экране
-  useEffect(() => {
-    videos.current.forEach((v) => {
-      if (!v) return;
-      if (inView) v.play().catch(() => {});
-      else v.pause();
-    });
+    const v = video.current;
+    if (!v) return;
+    if (inView) v.play().catch(() => {});
+    else v.pause();
   }, [inView]);
-
-  if (n === 0) return null;
-  const place = (i) => {
-    const d = (i - active + n) % n;
-    if (d === 0) return "is-center";
-    return d === 1 ? "is-right" : "is-left";
-  };
 
   return (
     <section id="students">
       <SectionHead>
-        Работы моих учеников. <span>У некоторых просмотров больше, чем у меня</span>
+        Так снимают <span>мои ученики</span>
       </SectionHead>
-      <Reveal>
-        <div className="flow" ref={wrap}>
-          {studentVideos.map((v, i) => (
-            <button
-              type="button"
-              key={v.src}
-              className={`flow-card ${place(i)}`}
-              onClick={() => setActive(i)}
-              aria-label={`Работа ученика ${i + 1}`}
-            >
-              <video
-                ref={(el) => (videos.current[i] = el)}
-                src={v.src}
-                poster={v.poster}
-                muted
-                loop
-                playsInline
-                preload="none"
-              />
-            </button>
-          ))}
+
+      <Reveal className="case">
+        <div className="clip case-clip" ref={wrap}>
+          <video
+            ref={video}
+            src={studentCase.src}
+            poster={studentCase.poster}
+            muted
+            loop
+            playsInline
+            preload="none"
+          />
+          <span className="clip-tag">Кейс ученика</span>
         </div>
-        <div className="flow-dots">
-          {studentVideos.map((v, i) => (
-            <button
-              type="button"
-              key={v.src}
-              className={i === active ? "on" : ""}
-              onClick={() => setActive(i)}
-              aria-label={`Показать работу ${i + 1}`}
+        <div className="case-side">
+          <a
+            className="case-profile"
+            href={studentCase.profileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={studentCase.profileShot}
+              alt={`Профиль ${studentCase.handle} в Instagram`}
+              width="670"
+              height="370"
+              loading="lazy"
             />
-          ))}
+          </a>
+          <p>
+            Обогнал меня по подписчикам и просмотрам. Сейчас работает с известными
+            брендами.
+          </p>
         </div>
       </Reveal>
+
+      <Reveal as="h3" className="sub-head">
+        А так снимают уже <span>после третьего урока</span>
+      </Reveal>
+      <Reveal>
+        <ClipRow videos={lessonThreeVideos} tag="Урок 3" />
+      </Reveal>
       <Reveal as="p" className="clips-note">
-        Сделаны в процессе обучения.
+        Сделано во время обучения.
+      </Reveal>
+
+      <Reveal className="students-cta">
+        <SocialButton kind="telegram" variant="solid">
+          Хочу так же
+        </SocialButton>
       </Reveal>
     </section>
   );
