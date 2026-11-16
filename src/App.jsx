@@ -386,9 +386,6 @@ function StudentWorks() {
       <SectionHead>
         Результаты <span>моих учеников</span>
       </SectionHead>
-      <Reveal className="students-pill">
-        <span className="free-badge">Всё это сделано в начале обучения</span>
-      </Reveal>
 
       <Reveal className="case">
         <div className="clip case-clip" ref={wrap}>
@@ -425,6 +422,10 @@ function StudentWorks() {
         </div>
       </Reveal>
 
+      <Reveal className="students-more">
+        <h3>Это тоже результаты моих учеников</h3>
+        <span className="free-badge">Всё это сделано в начале обучения</span>
+      </Reveal>
       <Reveal className="students-row">
         <ClipRow videos={lessonThreeVideos} tag="Работа ученика" />
       </Reveal>
@@ -446,28 +447,20 @@ function Reviews() {
       <SectionHead>
         Что говорят <span>ученики</span>
       </SectionHead>
-      <div className="reviews">
+      <Reveal className="reviews">
         {reviews.map((r) => (
-          <Reveal as="figure" className="review" key={r.name}>
-            <figcaption>
-              <span className="review-avatar" aria-hidden="true">
-                {r.name[0].toUpperCase()}
-              </span>
-              <span>
-                <b>{r.name}</b>
-                <small>{r.role ?? "Ученик курса"}</small>
-              </span>
-            </figcaption>
+          <figure className="review" key={r.img}>
             <img
               src={r.img}
-              alt={`Отзыв: ${r.name}`}
+              alt={`Отзыв в Telegram: ${r.name}`}
               width={r.w}
               height={r.h}
               loading="lazy"
             />
-          </Reveal>
+            <figcaption>{r.role}</figcaption>
+          </figure>
         ))}
-      </div>
+      </Reveal>
     </section>
   );
 }

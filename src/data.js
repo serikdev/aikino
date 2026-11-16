@@ -28,11 +28,11 @@ export const lessonThreeVideos = [
   { src: "/videos/s3.mp4", poster: "/videos/s3.jpg" },
 ];
 
-// Отзывы: обрезанные скриншоты переписки из папки public/reviews.
+// Отзывы: обрезанные скриншоты переписки в Telegram из папки public/reviews.
 export const reviews = [
-  { name: "Salmoni Fors", img: "/reviews/1.jpg", w: 500, h: 290 },
-  { name: "Guwanch", img: "/reviews/2.jpg", w: 516, h: 216 },
-  { name: "sunnahri", role: "Ученица курса", img: "/reviews/3.jpg", w: 500, h: 264 },
+  { name: "Salmoni Fors", role: "Ученик курса", img: "/reviews/1.jpg", w: 560, h: 426 },
+  { name: "Guwanch", role: "Ученик курса", img: "/reviews/2.jpg", w: 560, h: 344 },
+  { name: "sunnahri", role: "Мама ученика", img: "/reviews/3.jpg", w: 560, h: 400 },
 ];
 
 export const skills = [

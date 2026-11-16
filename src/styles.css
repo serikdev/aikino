@@ -589,25 +589,30 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12
   .students-cta .btn { width: 100%; }
 }
 
-/* ---------- Результаты учеников: плашка и ряд ---------- */
-.students-pill { margin: -10px 0 22px; }
-.students-pill .free-badge { height: auto; min-height: 34px; padding: 8px 14px; line-height: 1.3; }
-.students-row { margin-top: 16px; }
+/* ---------- Результаты учеников: надпись под кейсом ---------- */
+.students-more { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin: clamp(32px, 5vw, 52px) 0 18px; }
+.students-more h3 { font-size: clamp(19px, 3vw, 28px); letter-spacing: -0.02em; }
+.students-more .free-badge { height: auto; min-height: 34px; padding: 8px 14px; line-height: 1.3; }
 #students .clips { max-width: none; }
 
-/* ---------- Отзывы ---------- */
-.reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: start; }
+/* ---------- Отзывы: лента со свайпом ---------- */
+.reviews {
+  display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  margin: 0 -20px; padding: 0 20px 4px; scroll-padding: 0 20px;
+}
+.reviews::-webkit-scrollbar { display: none; }
 .review {
-  margin: 0; padding: 14px;
-  border: 1px solid var(--line); border-radius: var(--r-md);
-  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  flex: none; width: min(330px, 82vw); margin: 0; scroll-snap-align: start;
+  display: flex; flex-direction: column; overflow: hidden;
+  border: 1px solid var(--line-2); border-radius: var(--r-md); background: #17212b;
 }
-.review figcaption { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.review-avatar {
-  flex: none; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%;
-  background: var(--accent); color: var(--ink); font-family: var(--display); font-weight: 700; font-size: 16px;
+.review img { display: block; width: 100%; height: auto; }
+.review figcaption {
+  margin-top: auto; padding: 10px 14px; background: var(--bg);
+  border-top: 1px solid var(--line);
+  font-family: var(--display); font-weight: 600; font-size: 13px; color: var(--accent);
 }
-.review b { display: block; font-family: var(--display); font-weight: 600; font-size: 14px; letter-spacing: -0.01em; }
-.review small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
-.review img { display: block; width: 100%; height: auto; border-radius: var(--r-sm); }
-@media (max-width: 860px) { .reviews { grid-template-columns: 1fr; gap: 10px; } }
+
+/* Метка «Работа ученика» поменьше, чтобы не закрывала лица в маленьких роликах */
+#students .clips .clip-tag { top: 6px; left: 6px; padding: 2px 7px; font-family: var(--body); font-weight: 700; font-size: 10px; letter-spacing: 0; }
