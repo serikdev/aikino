@@ -563,3 +563,30 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12
   .clip { border-radius: var(--r-sm); }
   .clip:first-child { grid-column: 1 / -1; }
 }
+
+/* ---------- Работы учеников: карусель ---------- */
+.flow { position: relative; width: 100%; max-width: 860px; margin: 0 auto; aspect-ratio: 16 / 6.2; }
+.flow-card {
+  position: absolute; top: 50%; left: 50%; width: 58%; aspect-ratio: 16 / 9; padding: 0;
+  overflow: hidden; cursor: pointer; background: #0d0e0a;
+  border: 2px solid rgba(245, 243, 238, 0.85); border-radius: var(--r-md);
+  transform: translate(-50%, -50%) scale(0.8); opacity: 0.8; z-index: 1;
+  transition: transform 0.35s ease-out, opacity 0.35s ease-out, border-color 0.35s;
+}
+.flow-card video { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.flow-card.is-left { transform: translate(-86%, -50%) scale(0.8); }
+.flow-card.is-right { transform: translate(-14%, -50%) scale(0.8); }
+.flow-card.is-center {
+  transform: translate(-50%, -50%) scale(1); opacity: 1; z-index: 2; cursor: default;
+  border-color: var(--accent); box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.9);
+}
+.flow-dots { display: flex; justify-content: center; gap: 8px; margin-top: 18px; }
+.flow-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: var(--line-2); cursor: pointer; transition: width 0.25s, background 0.25s; }
+.flow-dots button.on { width: 26px; background: var(--accent); }
+#students .clips-note { text-align: center; }
+@media (max-width: 640px) {
+  .flow { aspect-ratio: 16 / 7.4; }
+  .flow-card { width: 74%; border-radius: var(--r-sm); }
+  .flow-card.is-left { transform: translate(-76%, -50%) scale(0.8); }
+  .flow-card.is-right { transform: translate(-24%, -50%) scale(0.8); }
+}

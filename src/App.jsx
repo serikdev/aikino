@@ -3,6 +3,7 @@ import {
   facts,
   skills,
   myVideos,
+  studentVideos,
   versus,
   how,
   weekMap,
@@ -349,6 +350,88 @@ function MyWorks() {
   );
 }
 
+/* ---------- Работы учеников: карусель ---------- */
+
+function StudentWorks() {
+  const n = studentVideos.length;
+  const [active, setActive] = useState(0);
+  const [inView, setInView] = useState(false);
+  const wrap = useRef(null);
+  const videos = useRef([]);
+
+  // Следим, виден ли блок: вне экрана ничего не играет
+  useEffect(() => {
+    const el = wrap.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), {
+      threshold: 0.4,
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Все ролики играют одновременно, пока блок на экране
+  useEffect(() => {
+    videos.current.forEach((v) => {
+      if (!v) return;
+      if (inView) v.play().catch(() => {});
+      else v.pause();
+    });
+  }, [inView]);
+
+  if (n === 0) return null;
+  const place = (i) => {
+    const d = (i - active + n) % n;
+    if (d === 0) return "is-center";
+    return d === 1 ? "is-right" : "is-left";
+  };
+
+  return (
+    <section id="students">
+      <SectionHead>
+        Работы моих учеников. <span>У некоторых просмотров больше, чем у меня</span>
+      </SectionHead>
+      <Reveal>
+        <div className="flow" ref={wrap}>
+          {studentVideos.map((v, i) => (
+            <button
+              type="button"
+              key={v.src}
+              className={`flow-card ${place(i)}`}
+              onClick={() => setActive(i)}
+              aria-label={`Работа ученика ${i + 1}`}
+            >
+              <video
+                ref={(el) => (videos.current[i] = el)}
+                src={v.src}
+                poster={v.poster}
+                muted
+                loop
+                playsInline
+                preload="none"
+              />
+            </button>
+          ))}
+        </div>
+        <div className="flow-dots">
+          {studentVideos.map((v, i) => (
+            <button
+              type="button"
+              key={v.src}
+              className={i === active ? "on" : ""}
+              onClick={() => setActive(i)}
+              aria-label={`Показать работу ${i + 1}`}
+            />
+          ))}
+        </div>
+      </Reveal>
+      <Reveal as="p" className="clips-note">
+        Сделаны в процессе обучения.
+      </Reveal>
+    </section>
+  );
+}
+
 /* ---------- Отличие ---------- */
 
 function Versus() {
@@ -664,6 +747,7 @@ export default function App() {
         <FreeReview />
         <Result />
         <MyWorks />
+        <StudentWorks />
         <Versus />
         <How />
         <Group />

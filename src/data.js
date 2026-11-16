@@ -12,6 +12,13 @@ export const myVideos = [
   { src: "/videos/3.mp4", poster: "/videos/3.jpg" },
 ];
 
+// Работы учеников: файлы из папки public/videos, без звука.
+export const studentVideos = [
+  { src: "/videos/s1.mp4", poster: "/videos/s1.jpg" },
+  { src: "/videos/s2.mp4", poster: "/videos/s2.jpg" },
+  { src: "/videos/s3.mp4", poster: "/videos/s3.jpg" },
+];
+
 export const skills = [
   "Герой выглядит как живой человек, а не как AI",
   "Одно лицо героя во всех сценах",
