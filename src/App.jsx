@@ -6,7 +6,6 @@ import {
   studentCase,
   lessonThreeVideos,
   reviews,
-  orders,
   versus,
   weekMap,
   modules,
@@ -363,17 +362,11 @@ function MyWorks() {
       </Reveal>
 
       <Reveal className="orders-head">
+        <span className="orders-dot" aria-hidden="true" />
         <h3>
           Честно: <span>я уже не успеваю брать все заказы</span>
         </h3>
-        <p>Спрос на AI-ролики растёт быстрее, чем людей, которые умеют их делать.</p>
-      </Reveal>
-      <Reveal className="reviews orders">
-        {orders.map((o) => (
-          <figure className="review order" key={o.img}>
-            <img src={o.img} alt="Сообщение с заказом ролика" width={o.w} height={o.h} loading="lazy" />
-          </figure>
-        ))}
+        <p>Это умение уже приносит деньги. И место на рынке ещё свободно.</p>
       </Reveal>
     </section>
   );

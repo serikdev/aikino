@@ -336,11 +336,3 @@ export const compare = [
   ["Продвижение в Instagram: показы Reels, профиль, серии", false, false, true],
   ["4 личных созвона один на один", false, false, true],
 ];
-
-// Сообщения с заказами: обрезанные скриншоты из Instagram без имён и фото, папка public/orders.
-export const orders = [
-  { img: "/orders/1.jpg", w: 560, h: 516 },
-  { img: "/orders/3.jpg", w: 560, h: 812 },
-  { img: "/orders/2.jpg", w: 560, h: 510 },
-  { img: "/orders/4.jpg", w: 560, h: 306 },
-];
