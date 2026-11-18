@@ -33,7 +33,7 @@ export const reviews = [
   { name: "Salmoni Fors", role: "Ученик курса", img: "/reviews/1.jpg", w: 560, h: 426 },
   { name: "Guwanch", role: "Ученик курса", img: "/reviews/2.jpg", w: 560, h: 344 },
   { name: "sunnahri", role: "Мама ученика", img: "/reviews/3.jpg", w: 560, h: 400 },
-  { name: "Ученик", role: "Ученик курса", img: "/reviews/4.jpg", w: 560, h: 214 },
+  { name: "Ученик", role: "Ученик курса", img: "/reviews/4.jpg", w: 560, h: 364 },
 ];
 
 export const skills = [
