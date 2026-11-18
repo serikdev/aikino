@@ -6,6 +6,7 @@ import {
   studentCase,
   lessonThreeVideos,
   reviews,
+  orders,
   versus,
   weekMap,
   modules,
@@ -359,6 +360,20 @@ function MyWorks() {
       </Reveal>
       <Reveal as="p" className="clips-note">
         Это мои ролики. Ни камеры, ни актёров: только нейросети.
+      </Reveal>
+
+      <Reveal className="orders-head">
+        <h3>
+          Честно: <span>я уже не успеваю брать все заказы</span>
+        </h3>
+        <p>Спрос на AI-ролики растёт быстрее, чем людей, которые умеют их делать.</p>
+      </Reveal>
+      <Reveal className="reviews orders">
+        {orders.map((o) => (
+          <figure className="review order" key={o.img}>
+            <img src={o.img} alt="Сообщение с заказом ролика" width={o.w} height={o.h} loading="lazy" />
+          </figure>
+        ))}
       </Reveal>
     </section>
   );

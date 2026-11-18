@@ -616,3 +616,11 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12
 
 /* Метка «Работа ученика» поменьше, чтобы не закрывала лица в маленьких роликах */
 #students .clips .clip-tag { top: 6px; left: 6px; padding: 2px 7px; font-family: var(--body); font-weight: 700; font-size: 10px; letter-spacing: 0; }
+
+/* ---------- Заказы под моими роликами ---------- */
+.orders-head { margin: clamp(32px, 5vw, 52px) 0 18px; }
+.orders-head h3 { font-size: clamp(22px, 3.4vw, 34px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin: 0; }
+.orders-head h3 span { color: var(--accent); }
+.orders-head p { margin: 10px 0 0; color: var(--muted); font-size: 16px; max-width: 52ch; }
+.orders { align-items: center; }
+.review.order { background: #000; width: min(330px, 82vw); }
