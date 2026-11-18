@@ -7,7 +7,6 @@ import {
   lessonThreeVideos,
   reviews,
   versus,
-  how,
   weekMap,
   modules,
   plans,
@@ -199,14 +198,14 @@ function Hero() {
       </p>
       <div className="hero-cta">
         <SocialButton kind="telegram" variant="solid">
-          Бесплатный разбор
+          Бесплатная консультация
         </SocialButton>
         <SocialButton kind="instagram" variant="ghost">
           Мои результаты
         </SocialButton>
       </div>
       <p className="hero-note">
-        <b>Разбор бесплатный.</b> Денег за него не берём.
+        <b>Консультация бесплатная.</b> Денег за неё не берём.
       </p>
       <div className="facts">
         {facts.map((f) => (
@@ -220,16 +219,12 @@ function Hero() {
   );
 }
 
-/* ---------- Бесплатный разбор ---------- */
+/* ---------- Бесплатная консультация ---------- */
 
 const freeSteps = [
   {
-    title: "Разберём твой Instagram",
-    text: "Что уже работает, а что мешает расти.",
-  },
-  {
-    title: "Узнаем твой формат",
-    text: "Что ты хочешь снимать и для чего.",
+    title: "Узнаем твою цель",
+    text: "Блог, заказы или свой бизнес.",
   },
   {
     title: "Честно скажем, подходит ли курс",
@@ -243,7 +238,7 @@ function FreeReview() {
       <Reveal className="free">
         <span className="free-badge">Бесплатно · 0 $</span>
         <h2>
-          Сначала разбор. <span>Платить не нужно</span>
+          Бесплатная консультация. <span>Можно с полного нуля</span>
         </h2>
         <ol className="free-steps">
           {freeSteps.map((s, i) => (
@@ -256,11 +251,11 @@ function FreeReview() {
         </ol>
         <p className="free-quote">
           Я сам долго боялся и начал очень поздно. Поэтому первый шаг для тебя{" "}
-          <b>бесплатный</b>: не бойся, денег за разбор мы не берём.
+          <b>бесплатный</b>: не бойся, за консультацию денег не берём.
         </p>
         <div className="free-cta">
           <SocialButton kind="telegram" variant="solid">
-            Записаться на разбор
+            Записаться на консультацию
           </SocialButton>
           <SocialButton kind="instagram" variant="ghost">
             Смотри мои результаты
@@ -275,7 +270,7 @@ function FreeReview() {
 
 function Result() {
   return (
-    <section>
+    <section id="result">
       <SectionHead>
         Что у тебя будет <span>через 8 недель</span>
       </SectionHead>
@@ -411,7 +406,7 @@ function StudentWorks() {
               src={studentCase.profileShot}
               alt={`Профиль ${studentCase.handle} в Instagram`}
               width="670"
-              height="370"
+              height="416"
               loading="lazy"
             />
           </a>
@@ -431,9 +426,10 @@ function StudentWorks() {
       </Reveal>
 
       <Reveal className="students-cta">
-        <SocialButton kind="telegram" variant="solid">
-          Хочу так же
-        </SocialButton>
+        <a className="btn btn-solid" href="#result">
+          <span>Хочу так же</span>
+          <Arrow />
+        </a>
       </Reveal>
     </section>
   );
@@ -489,27 +485,6 @@ function Versus() {
   );
 }
 
-/* ---------- Как проходит ---------- */
-
-function How() {
-  return (
-    <section>
-      <SectionHead>
-        Как проходит <span>обучение</span>
-      </SectionHead>
-      <div className="how">
-        {how.map((h, i) => (
-          <Reveal className="card" key={h.title}>
-            <b>{h.big}</b>
-            <h3>{h.title}</h3>
-            <p>{h.text}</p>
-          </Reveal>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 /* ---------- Мини-группа ---------- */
 
 // Сколько человек в одной мини-группе внутри потока. Меняется только здесь.
@@ -519,17 +494,17 @@ const groupPerks = [
   {
     big: "Свой чат",
     title: `На ${GROUP_SIZE} человек`,
-    text: "Закрытый чат твоей мини-группы в Telegram. Здесь не стыдно задать любой вопрос.",
+    text: "Закрытый чат в Telegram. Здесь не стыдно спросить.",
   },
   {
     big: "Тебя видно",
-    title: "В своей мини-группе",
-    text: "В маленькой группе видно каждого участника и каждый ролик. Твой вопрос не утонет в ленте.",
+    title: "Каждый вопрос и ролик",
+    text: "Твой вопрос не утонет в ленте.",
   },
   {
     big: "Ты не один",
     title: "Рядом такие же новички",
-    text: "Идеи, работы и поддержка от группы. Вместе проще дойти до финала.",
+    text: "Вместе проще дойти до финала.",
   },
 ];
 
@@ -722,11 +697,11 @@ function Cta() {
     <Reveal className="cta">
       <div>
         <h2>Сделай свой первый кино-ролик</h2>
-        <p>Начни с бесплатного разбора. Денег за него не берём.</p>
+        <p>Начни с бесплатной консультации. Денег за неё не берём.</p>
       </div>
       <div className="cta-btns">
         <SocialButton kind="telegram" variant="dark">
-          Бесплатный разбор
+          Бесплатная консультация
         </SocialButton>
         <SocialButton kind="instagram" variant="dark">
           {INSTAGRAM_HANDLE}
@@ -760,7 +735,7 @@ function Dock() {
   return (
     <div className={`dock ${visible ? "is-visible" : ""}`}>
       <SocialButton kind="telegram" variant="solid">
-        Бесплатный разбор
+        Бесплатная консультация
       </SocialButton>
       <SocialButton kind="instagram" variant="ghost" />
     </div>
@@ -778,12 +753,11 @@ export default function App() {
       <main className="wrap">
         <Hero />
         <FreeReview />
-        <Result />
         <MyWorks />
         <StudentWorks />
+        <Result />
         <Reviews />
         <Versus />
-        <How />
         <Group />
         <Program />
         <Plans />

@@ -427,7 +427,7 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
 }
 .free-lead { color: var(--muted); font-size: clamp(16px, 2vw, 19px); margin: 14px 0 0; max-width: 52ch; }
-.free-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 28px 0 0; padding: 0; list-style: none; }
+.free-steps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 28px 0 0; padding: 0; list-style: none; }
 .free-steps li { background: rgba(5, 5, 5, 0.55); border: 1px solid var(--line); border-radius: var(--r-md); padding: 20px; }
 .free-steps b { display: block; font-family: var(--display); font-weight: 800; font-size: 13px; color: var(--accent); letter-spacing: 0.08em; }
 .free-steps h3 { font-size: 16px; margin: 12px 0 6px; letter-spacing: -0.01em; }

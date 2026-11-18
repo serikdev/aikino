@@ -3,7 +3,7 @@ const TELEGRAM_USER = "manager_aikino";
 
 // Текст, который уже будет написан в Telegram, когда человек нажмёт кнопку.
 // Ему останется только нажать «Отправить».
-const MESSAGE = "Привет, хочу разбор";
+const MESSAGE = "Привет, хочу консультацию";
 
 const telegramLink = (text) =>
   `https://t.me/${TELEGRAM_USER}?text=${encodeURIComponent(text)}`;
