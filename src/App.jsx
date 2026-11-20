@@ -10,7 +10,6 @@ import {
   weekMap,
   modules,
   plans,
-  compare,
 } from "./data.js";
 import { TELEGRAM_URL, INSTAGRAM_URL, INSTAGRAM_HANDLE } from "./links.js";
 import { PromoBar, PlansPromo, Popup, isPromoActive } from "./Promo.jsx";
@@ -652,6 +651,13 @@ function Plans() {
   return (
     <section id="plans">
       <SectionHead>Тарифы</SectionHead>
+      <Reveal className="plans-claim">
+        <h3>Сгенерировать ролик сегодня может каждый.</h3>
+        <h3>
+          <span>Сделать реалистичный ролик, который продаёт и который досматривают до конца, умеют единицы.</span>
+        </h3>
+        <p>Этому мы и учим.</p>
+      </Reveal>
       <Reveal>
         <PlansPromo />
       </Reveal>
@@ -664,33 +670,18 @@ function Plans() {
             <div className="price">{promo ? p.sale : p.price}</div>
             <div className="price-rub">{promo ? p.saleRub : p.rub}</div>
             <p>{p.text}</p>
+            {p.from && <div className="plan-from">{p.from}</div>}
+            <ul className="plan-list">
+              {p.items.map(([t, bold]) => (
+                <li key={t}>
+                  <span className="check">✓</span>
+                  {bold ? <b>{t}</b> : t}
+                </li>
+              ))}
+            </ul>
           </Reveal>
         ))}
       </div>
-      <Reveal className="cmp-wrap">
-        <table className="cmp">
-          <thead>
-            <tr>
-              <th>Что входит</th>
-              <th>Старт</th>
-              <th className="hl">Практик</th>
-              <th>Наставник</th>
-            </tr>
-          </thead>
-          <tbody>
-            {compare.map(([label, a, b, c]) => (
-              <tr key={label}>
-                <td>{label}</td>
-                {[a, b, c].map((v, i) => (
-                  <td key={i} className={i === 1 ? "hl" : ""}>
-                    {v ? <span className="y">✓</span> : <span className="no">—</span>}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </Reveal>
       <Reveal className="need">
         <b>Понадобится:</b> компьютер или телефон.
       </Reveal>

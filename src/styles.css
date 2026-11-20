@@ -310,16 +310,6 @@ section { padding-top: clamp(72px, 10vw, 120px); }
 .plan .price { font-family: var(--display); font-size: clamp(38px, 5vw, 50px); font-weight: 800; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; letter-spacing: -0.04em; margin: 6px 0; }
 .plan p { margin: 0; color: var(--muted); font-size: 15px; }
 
-.cmp-wrap { margin-top: 12px; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--panel); }
-table.cmp { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 330px; }
-.cmp th, .cmp td { padding: 14px 16px; border-bottom: 1px solid var(--line); text-align: center; vertical-align: middle; }
-.cmp th:first-child, .cmp td:first-child { text-align: left; }
-.cmp thead th { font-family: var(--display); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
-.cmp thead th.hl { color: var(--ink); background: var(--accent); }
-.cmp td.hl { background: var(--accent-soft); }
-.y { color: var(--accent); font-weight: 700; font-size: 17px; }
-.no { color: var(--dim); }
-.cmp tbody tr:last-child td { border-bottom: 0; }
 
 .need { margin-top: 16px; color: var(--muted); font-size: 15px; border-left: 2px solid var(--accent); padding: 4px 0 4px 16px; }
 .need b { color: var(--text); }
@@ -380,9 +370,6 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12
   .lesson .n b { display: inline; font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.08em; margin-left: 4px; }
   .lesson h4 { font-size: 17px; }
   .task strong { display: block; margin-bottom: 4px; }
-  .cmp th, .cmp td { padding: 11px 6px; font-size: 13.5px; }
-  .cmp th:first-child, .cmp td:first-child { padding-left: 14px; }
-  .cmp thead th { font-size: 9.5px; letter-spacing: 0; }
   .cta-btns { width: 100%; }
   .cta-btns .btn { flex: 1 1 100%; }
   footer { padding-bottom: 110px; }
@@ -627,3 +614,16 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12
 .orders-head h3 { font-size: clamp(24px, 3.6vw, 38px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.12; margin: 0; }
 .orders-head h3 span { color: var(--accent); }
 .orders-head p { margin: 12px 0 0; color: var(--muted); font-size: 16px; line-height: 1.5; max-width: 52ch; }
+
+/* ---------- Тарифы: что входит и фраза над карточками ---------- */
+.plans-claim { margin: 0 0 22px; }
+.plans-claim h3 { font-size: clamp(21px, 3.2vw, 32px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin: 0; }
+.plans-claim h3 + h3 { margin-top: 8px; }
+.plans-claim h3 span { color: var(--accent); }
+.plans-claim p { margin: 12px 0 0; color: var(--muted); font-size: 16px; }
+.plan-from { margin-top: 6px; padding-top: 14px; border-top: 1px solid var(--line); font-family: var(--display); font-weight: 600; font-size: 13px; color: var(--accent); }
+.plan > p + .plan-list { margin-top: 6px; padding-top: 14px; border-top: 1px solid var(--line); }
+.plan-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.4; }
+.plan-list li { display: flex; gap: 10px; align-items: flex-start; }
+.plan-list .check { flex: none; width: 20px; height: 20px; font-size: 11px; margin-top: 1px; }
+.plan-list b { color: var(--text); font-weight: 700; }
