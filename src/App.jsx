@@ -665,6 +665,7 @@ function Plans() {
         {plans.map((p, i) => (
           <Reveal className={`plan ${p.best ? "best" : ""}`} key={p.name}>
             {p.best && <span className="badge">Рекомендую</span>}
+            {p.limit && <span className="badge badge-limit">{p.limit}</span>}
             <h3>{p.name}</h3>
             {promo && <div className="price-old">{p.price}</div>}
             <div className="price">{promo ? p.sale : p.price}</div>
@@ -679,6 +680,7 @@ function Plans() {
                 </li>
               ))}
             </ul>
+            {p.limitNote && <p className="plan-limit">{p.limitNote}</p>}
           </Reveal>
         ))}
       </div>
