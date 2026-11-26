@@ -629,3 +629,16 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12
 .plan-list b { color: var(--text); font-weight: 700; }
 .plan .badge-limit { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
 .plan .plan-limit { margin-top: 4px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--text); font-weight: 600; font-size: 14.5px; }
+
+/* ---------- Бесплатный урок ---------- */
+.lesson {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  padding: clamp(22px, 4vw, 34px); border: 1px solid var(--accent); border-radius: var(--r-lg);
+  background: linear-gradient(135deg, rgba(209, 254, 23, 0.16), rgba(209, 254, 23, 0.03) 65%);
+  box-shadow: 0 16px 40px -24px rgba(209, 254, 23, 0.5);
+}
+.lesson > div { flex: 1 1 320px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.lesson h2 { margin: 0; font-size: clamp(26px, 4vw, 40px); letter-spacing: -0.03em; line-height: 1.05; }
+.lesson h2 span { color: var(--accent); }
+.lesson p { margin: 0; color: var(--muted); font-size: 16px; max-width: 52ch; }
+@media (max-width: 640px) { .lesson .btn { width: 100%; } }

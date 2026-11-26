@@ -12,7 +12,7 @@ import {
   plans,
 } from "./data.js";
 import { TELEGRAM_URL, INSTAGRAM_URL, INSTAGRAM_HANDLE } from "./links.js";
-import { PromoBar, PlansPromo, Popup, isPromoActive } from "./Promo.jsx";
+import { PromoBar, PlansPromo, Popup, LessonCard, isPromoActive } from "./Promo.jsx";
 
 /* ---------- Иконки ---------- */
 
@@ -753,6 +753,7 @@ export default function App() {
       <Nav />
       <main className="wrap">
         <Hero />
+        <LessonCard />
         <FreeReview />
         <MyWorks />
         <StudentWorks />

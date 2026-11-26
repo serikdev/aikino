@@ -1,24 +1,32 @@
 import { useEffect, useState } from "react";
 import { TELEGRAM_URL } from "./links.js";
 
-/* Акция. Все даты и размер скидки меняются только здесь. */
-export const COURSE_START = "15 декабря";
-export const DEADLINE_LABEL = "25 ноября";
-export const DISCOUNT = 10;
-// Последняя секунда акции (по московскому времени). После неё скидка сама исчезнет с сайта.
-const DEADLINE = new Date("2026-11-25T23:59:59+03:00").getTime();
+/* Набор и бесплатный урок. Все даты меняются только здесь. */
+// Telegram-канал, где проходит бесплатный урок
+export const CHANNEL_URL = "https://t.me/serdarai";
+export const LESSON_LABEL = "3 декабря";
+export const ENROLL_LABEL = "6 декабря";
+// Конец дня урока и последняя секунда набора (по московскому времени).
+// После этих моментов надписи сами исчезают с сайта.
+const LESSON_END = new Date("2026-12-03T23:59:59+03:00").getTime();
+const ENROLL_END = new Date("2026-12-06T23:59:59+03:00").getTime();
 
-export const isPromoActive = () => Date.now() < DEADLINE;
+// Старая скидка 10% до 25 ноября: уже закончилась, цены со скидкой не показываются.
+const SALE_END = new Date("2026-11-25T23:59:59+03:00").getTime();
+export const isPromoActive = () => Date.now() < SALE_END;
+
+const isLessonAhead = () => Date.now() < LESSON_END;
+const isEnrollOpen = () => Date.now() < ENROLL_END;
 
 const pad = (n) => String(n).padStart(2, "0");
 
-export function Countdown() {
-  const [left, setLeft] = useState(() => DEADLINE - Date.now());
+export function Countdown({ to = ENROLL_END, label = `До закрытия набора, ${ENROLL_LABEL}` }) {
+  const [left, setLeft] = useState(() => to - Date.now());
 
   useEffect(() => {
-    const id = setInterval(() => setLeft(DEADLINE - Date.now()), 1000);
+    const id = setInterval(() => setLeft(to - Date.now()), 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [to]);
 
   if (left <= 0) return null;
   const s = Math.floor(left / 1000);
@@ -30,11 +38,11 @@ export function Countdown() {
   ];
 
   return (
-    <div className="countdown" role="timer" aria-label={`До конца скидки, ${DEADLINE_LABEL}`}>
-      {parts.map(([n, label]) => (
-        <span key={label}>
+    <div className="countdown" role="timer" aria-label={label}>
+      {parts.map(([n, unit]) => (
+        <span key={unit}>
           <b>{pad(n)}</b>
-          <small>{label}</small>
+          <small>{unit}</small>
         </span>
       ))}
     </div>
@@ -43,38 +51,30 @@ export function Countdown() {
 
 /* Тонкая полоса над шапкой */
 export function PromoBar() {
+  if (!isEnrollOpen()) return null;
+  if (isLessonAhead()) {
+    return (
+      <a className="promo-bar" href={CHANNEL_URL} target="_blank" rel="noopener noreferrer">
+        <b>Бесплатный урок {LESSON_LABEL}</b>
+        <span>Набор до {ENROLL_LABEL}</span>
+      </a>
+    );
+  }
   return (
     <a className="promo-bar" href="#plans">
-      <span>Старт {COURSE_START}</span>
-      {isPromoActive() && (
-        <b>
-          −{DISCOUNT}% на любой тариф до {DEADLINE_LABEL}
-        </b>
-      )}
+      <b>Набор закрывается {ENROLL_LABEL}</b>
     </a>
   );
 }
 
 /* Баннер над тарифами */
 export function PlansPromo() {
-  if (!isPromoActive()) {
-    return (
-      <div className="plans-promo">
-        <div>
-          <h3>Старт {COURSE_START}</h3>
-        </div>
-      </div>
-    );
-  }
+  if (!isEnrollOpen()) return null;
   return (
     <div className="plans-promo">
       <div>
-        <h3>
-          −{DISCOUNT}% на любой тариф
-        </h3>
-        <p>
-          При оплате до {DEADLINE_LABEL}. Курс стартует {COURSE_START}.
-        </p>
+        <h3>Набор закрывается {ENROLL_LABEL}</h3>
+        <p>После этого записаться на этот поток будет нельзя.</p>
       </div>
       <Countdown />
     </div>
@@ -133,7 +133,7 @@ export function Popup() {
   }, [open]);
 
   if (!open) return null;
-  const promo = isPromoActive();
+  const lesson = isLessonAhead();
 
   return (
     <div className="popup-backdrop" onClick={() => setOpen(false)}>
@@ -151,12 +151,12 @@ export function Popup() {
           onClick={() => setOpen(false)}
         />
         <span className="free-badge">
-          {promo ? `До ${DEADLINE_LABEL}` : "Бесплатно · 0 $"}
+          {lesson ? `${LESSON_LABEL} · Бесплатно` : "Бесплатно · 0 $"}
         </span>
         <h3 id="popup-title">
-          {promo ? (
+          {lesson ? (
             <>
-              −{DISCOUNT}% <span>на любой тариф</span>
+              Бесплатный <span>живой урок</span>
             </>
           ) : (
             <>
@@ -165,22 +165,42 @@ export function Popup() {
           )}
         </h3>
         <p>
-          {promo
-            ? `Курс стартует ${COURSE_START}. Сначала бесплатная консультация, потом решаешь.`
-            : `Курс стартует ${COURSE_START}. Узнаем твою цель и честно скажем, подходит ли курс.`}
+          {lesson
+            ? "Покажу, как я делаю свои реалистичные ролики, которые набирают больше миллиона просмотров."
+            : "Узнаем твою цель и честно скажем, подходит ли курс."}
         </p>
-        {promo && <Countdown />}
         <a
           className="btn btn-solid"
-          href={TELEGRAM_URL}
+          href={lesson ? CHANNEL_URL : TELEGRAM_URL}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => setOpen(false)}
         >
-          {promo ? "Забрать скидку в Telegram" : "Записаться на консультацию"}
+          {lesson ? "Прийти на урок" : "Записаться на консультацию"}
         </a>
-        <small>Консультация бесплатная. Денег за неё не берём.</small>
+        <small>
+          {lesson ? "Урок проходит в моём Telegram-канале." : "Консультация бесплатная. Денег за неё не берём."}
+        </small>
       </div>
     </div>
+  );
+}
+
+/* Карточка бесплатного урока под первым экраном. Исчезает после дня урока. */
+export function LessonCard() {
+  if (!isLessonAhead()) return null;
+  return (
+    <section className="lesson">
+      <div>
+        <span className="free-badge">{LESSON_LABEL} · Бесплатно</span>
+        <h2>
+          Бесплатный <span>живой урок</span>
+        </h2>
+        <p>Покажу, как я делаю реалистичные ролики, которые набирают больше миллиона просмотров. Приходи, даже если ты с полного нуля.</p>
+      </div>
+      <a className="btn btn-solid" href={CHANNEL_URL} target="_blank" rel="noopener noreferrer">
+        <span>Прийти на урок</span>
+      </a>
+    </section>
   );
 }

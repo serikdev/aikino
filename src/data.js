@@ -307,10 +307,10 @@ export const modules = [
 export const plans = [
   {
     name: "Старт",
-    price: "$350",
-    rub: "≈ 29 000 ₽",
-    sale: "$315",
-    saleRub: "≈ 26 000 ₽",
+    price: "$199",
+    rub: "≈ 16 000 ₽",
+    sale: "$199",
+    saleRub: "≈ 16 000 ₽",
     text: "Учишься сам, в своём темпе",
     items: [["16 уроков в записи"]],
   },
