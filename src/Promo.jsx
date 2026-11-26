@@ -4,12 +4,12 @@ import { INSTAGRAM_DM_URL } from "./links.js";
 /* Набор и бесплатный урок. Все даты меняются только здесь. */
 // Telegram-канал, где проходит бесплатный урок
 export const CHANNEL_URL = "https://t.me/serdarai";
-export const LESSON_LABEL = "3 декабря";
-export const ENROLL_LABEL = "6 декабря";
+export const LESSON_LABEL = "4 декабря";
+export const ENROLL_LABEL = "7 декабря";
 // Конец дня урока и последняя секунда набора (по московскому времени).
 // После этих моментов надписи сами исчезают с сайта.
-const LESSON_END = new Date("2026-12-03T23:59:59+03:00").getTime();
-const ENROLL_END = new Date("2026-12-06T23:59:59+03:00").getTime();
+const LESSON_END = new Date("2026-12-04T23:59:59+03:00").getTime();
+const ENROLL_END = new Date("2026-12-07T23:59:59+03:00").getTime();
 
 // Старая скидка 10% до 25 ноября: уже закончилась, цены со скидкой не показываются.
 const SALE_END = new Date("2026-11-25T23:59:59+03:00").getTime();
