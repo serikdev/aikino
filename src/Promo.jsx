@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TELEGRAM_URL } from "./links.js";
+import { INSTAGRAM_DM_URL } from "./links.js";
 
 /* Набор и бесплатный урок. Все даты меняются только здесь. */
 // Telegram-канал, где проходит бесплатный урок
@@ -171,7 +171,7 @@ export function Popup() {
         </p>
         <a
           className="btn btn-solid"
-          href={lesson ? CHANNEL_URL : TELEGRAM_URL}
+          href={lesson ? CHANNEL_URL : INSTAGRAM_DM_URL}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => setOpen(false)}

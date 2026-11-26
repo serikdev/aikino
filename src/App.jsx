@@ -11,7 +11,7 @@ import {
   modules,
   plans,
 } from "./data.js";
-import { TELEGRAM_URL, INSTAGRAM_URL, INSTAGRAM_HANDLE } from "./links.js";
+import { TELEGRAM_URL, INSTAGRAM_URL, INSTAGRAM_DM_URL, INSTAGRAM_HANDLE } from "./links.js";
 import { PromoBar, PlansPromo, Popup, LessonCard, isPromoActive } from "./Promo.jsx";
 
 /* ---------- Иконки ---------- */
@@ -65,10 +65,11 @@ function Arrow() {
 
 function SocialButton({ kind, variant = "solid", children, className = "" }) {
   const isTg = kind === "telegram";
+  const href = isTg ? TELEGRAM_URL : kind === "direct" ? INSTAGRAM_DM_URL : INSTAGRAM_URL;
   return (
     <a
       className={`btn btn-${variant} ${className}`}
-      href={isTg ? TELEGRAM_URL : INSTAGRAM_URL}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -196,7 +197,7 @@ function Hero() {
         Без камеры, актёров и съёмок. Только нейросети и правильный процесс.
       </p>
       <div className="hero-cta">
-        <SocialButton kind="telegram" variant="solid">
+        <SocialButton kind="direct" variant="solid">
           Бесплатная консультация
         </SocialButton>
         <SocialButton kind="instagram" variant="ghost">
@@ -253,7 +254,7 @@ function FreeReview() {
           <b>бесплатный</b>: не бойся, за консультацию денег не берём.
         </p>
         <div className="free-cta">
-          <SocialButton kind="telegram" variant="solid">
+          <SocialButton kind="direct" variant="solid">
             Записаться на консультацию
           </SocialButton>
           <SocialButton kind="instagram" variant="ghost">
@@ -701,7 +702,7 @@ function Cta() {
         <p>Начни с бесплатной консультации. Денег за неё не берём.</p>
       </div>
       <div className="cta-btns">
-        <SocialButton kind="telegram" variant="dark">
+        <SocialButton kind="direct" variant="dark">
           Бесплатная консультация
         </SocialButton>
         <SocialButton kind="instagram" variant="dark">
@@ -735,7 +736,7 @@ function Dock() {
 
   return (
     <div className={`dock ${visible ? "is-visible" : ""}`}>
-      <SocialButton kind="telegram" variant="solid">
+      <SocialButton kind="direct" variant="solid">
         Бесплатная консультация
       </SocialButton>
       <SocialButton kind="instagram" variant="ghost" />

@@ -11,3 +11,6 @@ const telegramLink = (text) =>
 export const TELEGRAM_URL = telegramLink(MESSAGE);
 export const INSTAGRAM_URL = "https://www.instagram.com/serdar_agam/";
 export const INSTAGRAM_HANDLE = "@serdar_agam";
+
+// Личные сообщения в Instagram: сюда ведут кнопки «Бесплатная консультация»
+export const INSTAGRAM_DM_URL = "https://ig.me/m/serdar_agam";
